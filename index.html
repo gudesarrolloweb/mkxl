@@ -240,6 +240,34 @@
   // Personajes, todos con estilo, mejor variante, daño, combos, fatalities, brutalities y errores comunes
   const characters = [
     {
+      id: "jason",
+      name: "Jason Voorhees (Relentless)",
+      comboDamage: 75,
+      style: "defensivo",
+      description: "Lento pero muy fuerte, ideal para castigos.",
+      combo: [
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol],
+        ["R2 + ↓→ + Círculo (agarre EX)"],
+        ["Dash"],
+        [icons.cuadrado.symbol, ",", icons.triangulo.symbol],
+        [icons.flechaAbajo.symbol, "+", icons.equis.symbol, "→ R2 (X-Ray)"]
+      ],
+      fatality: {
+        name: "(Greatest Hits)",
+        distance: "Media",
+        combo: [icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.flechaDerecha.symbol, icons.circulo.symbol]
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Terminar con motosierra sin ser bloqueado",
+        combo: [icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol, icons.cuadrado.symbol, icons.triangulo.symbol]
+      },
+      errors: [
+        "No dejes que te bloqueen la motosierra.",
+        "Timing lento pero poderoso, cuidado con contraataques."
+      ]
+    }
+    {
       id: "johnny",
       name: "Johnny Cage (Stunt Double)",
       comboDamage: 70,
@@ -263,6 +291,58 @@
       errors: [
         "No mantengas presionado demasiado el botón durante el combo.",
         "Timing crítico para activar Stunt Double."
+      ]
+    },
+  {
+      id: "alien",
+      name: "Alien (Tarkatan)",
+      comboDamage: 60,
+      style: "avanzado",
+      description: "Personaje poderoso y extraño, con ataques exóticos.",
+      combo: [
+        [icons.flechaDerecha.symbol, "+", icons.triangulo.symbol, icons.triangulo.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol],
+        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
+      ],
+      fatality: {
+        name: "(Deadly Sting)",
+        distance: "Media",
+        combo: [icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.flechaAbajo.symbol, icons.circulo.symbol]
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Mantener presionado ↓ durante el último golpe (Back Stabber)",
+        combo: [icons.flechaIzquierda.symbol, icons.cuadrado.symbol, icons.cuadrado.symbol, icons.triangulo.symbol]
+      },
+      errors: [
+        "Cuidado con mantener presionado demasiado el botón final.",
+        "Aprende bien los movimientos exóticos para combos."
+      ]
+    },
+  {
+      id: "liukang",
+      name: "Liu Kang (Dragon’s Fire)",
+      comboDamage: 55,
+      style: "agresivo",
+      description: "Combina velocidad y poder, ideal para ataques constantes.",
+      combo: [
+        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ", cancelar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ", cancelar otra vez"],
+        [icons.equis.symbol, ",", icons.equis.symbol, ", cancelar y terminar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
+      ],
+      fatality: {
+        name: "(Burn Out)",
+        distance: "Cercana",
+        combo: [icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.cuadrado.symbol]
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Terminar con Flying Dragon Kick y mantener presionado →",
+        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
+      },
+      errors: [
+        "Asegúrate de cancelar a tiempo para continuar el combo.",
+        "No mantener presionado demasiado el botón de ataque."
       ]
     },
     {
@@ -292,30 +372,31 @@
         "Ejecuta movimientos rápido para combos largos."
       ]
     },
-    {
-      id: "liukang",
-      name: "Liu Kang (Dragon’s Fire)",
-      comboDamage: 55,
-      style: "agresivo",
-      description: "Combina velocidad y poder, ideal para ataques constantes.",
+  {
+      id: "shinnok",
+      name: "Shinnok (Impostor)",
+      comboDamage: 50,
+      style: "avanzado",
+      description: "Controla poderes oscuros, requiere buena estrategia.",
       combo: [
-        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ", cancelar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ", cancelar otra vez"],
-        [icons.equis.symbol, ",", icons.equis.symbol, ", cancelar y terminar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
+        [icons.flechaDerecha.symbol, "+", icons.equis.symbol, ",", icons.cuadrado.symbol, ",", "R2", "+", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol],
+        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, "con poder robado activado"],
+        ["Corré y hacé:", icons.flechaDerecha.symbol, "+", icons.equis.symbol, ",", icons.cuadrado.symbol]
       ],
       fatality: {
-        name: "(Burn Out)",
-        distance: "Cercana",
-        combo: [icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.cuadrado.symbol]
+        name: "(Judgement Fist)",
+        distance: "Media",
+        combo: [icons.flechaIzquierda.symbol, icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.triangulo.symbol]
       },
       brutality: {
         distance: "Cercana",
-        condition: "Terminar con Flying Dragon Kick y mantener presionado →",
-        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
+        condition: "Matar con poder robado en el último golpe",
+        combo: ["Botones del ataque robado"]
       },
       errors: [
-        "Asegúrate de cancelar a tiempo para continuar el combo.",
-        "No mantener presionado demasiado el botón de ataque."
+        "Usa bien el poder robado para combos óptimos.",
+        "No te quedes quieto en la estrategia."
       ]
     },
     {
@@ -399,33 +480,7 @@
         "Mantener el timing en combos de hielo."
       ]
     },
-    {
-      id: "shinnok",
-      name: "Shinnok (Impostor)",
-      comboDamage: 50,
-      style: "avanzado",
-      description: "Controla poderes oscuros, requiere buena estrategia.",
-      combo: [
-        [icons.flechaDerecha.symbol, "+", icons.equis.symbol, ",", icons.cuadrado.symbol, ",", "R2", "+", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol],
-        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, "con poder robado activado"],
-        ["Corré y hacé:", icons.flechaDerecha.symbol, "+", icons.equis.symbol, ",", icons.cuadrado.symbol]
-      ],
-      fatality: {
-        name: "(Judgement Fist)",
-        distance: "Media",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.triangulo.symbol]
-      },
-      brutality: {
-        distance: "Cercana",
-        condition: "Matar con poder robado en el último golpe",
-        combo: ["Botones del ataque robado"]
-      },
-      errors: [
-        "Usa bien el poder robado para combos óptimos.",
-        "No te quedes quieto en la estrategia."
-      ]
-    },
+    
     {
       id: "erronblack",
       name: "Erron Black (Outlaw)",
@@ -453,60 +508,7 @@
         "Mantén la distancia para tiros efectivos."
       ]
     },
-    {
-      id: "alien",
-      name: "Alien (Tarkatan)",
-      comboDamage: 60,
-      style: "avanzado",
-      description: "Personaje poderoso y extraño, con ataques exóticos.",
-      combo: [
-        [icons.flechaDerecha.symbol, "+", icons.triangulo.symbol, icons.triangulo.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol],
-        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
-      ],
-      fatality: {
-        name: "(Deadly Sting)",
-        distance: "Media",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.flechaAbajo.symbol, icons.circulo.symbol]
-      },
-      brutality: {
-        distance: "Cercana",
-        condition: "Mantener presionado ↓ durante el último golpe (Back Stabber)",
-        combo: [icons.flechaIzquierda.symbol, icons.cuadrado.symbol, icons.cuadrado.symbol, icons.triangulo.symbol]
-      },
-      errors: [
-        "Cuidado con mantener presionado demasiado el botón final.",
-        "Aprende bien los movimientos exóticos para combos."
-      ]
-    },
-    {
-      id: "jason",
-      name: "Jason Voorhees (Relentless)",
-      comboDamage: 75,
-      style: "defensivo",
-      description: "Lento pero muy fuerte, ideal para castigos.",
-      combo: [
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol],
-        ["R2 + ↓→ + Círculo (agarre EX)"],
-        ["Dash"],
-        [icons.cuadrado.symbol, ",", icons.triangulo.symbol],
-        [icons.flechaAbajo.symbol, "+", icons.equis.symbol, "→ R2 (X-Ray)"]
-      ],
-      fatality: {
-        name: "(Greatest Hits)",
-        distance: "Media",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.flechaDerecha.symbol, icons.circulo.symbol]
-      },
-      brutality: {
-        distance: "Cercana",
-        condition: "Terminar con motosierra sin ser bloqueado",
-        combo: [icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol, icons.cuadrado.symbol, icons.triangulo.symbol]
-      },
-      errors: [
-        "No dejes que te bloqueen la motosierra.",
-        "Timing lento pero poderoso, cuidado con contraataques."
-      ]
-    }
+       
   ];
 
   // FUNCIONES
