@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Combos, Fatalities y Brutalities – MKXL</title>
+<style>
+  body {
+    background-color: #0d0d0d;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #e50914;
+    margin-bottom: 1rem;
+  }
+  select {
+    display: block;
+    margin: 0 auto 1rem;
+    padding: 10px;
+    font-size: 1.3rem;
+    background: #222;
+    color: #eee;
+    border: 1px solid #e50914;
+    border-radius: 5px;
+    max-width: 320px;
+    cursor: pointer;
+    -webkit-appearance: menulist-button;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px #e50914;
+  }
+  .combo-text, .fatality-text, .brutality-text {
+    white-space: pre-wrap;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-weight: 700;
+    color: #f39c12;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+  }
+</style>
+</head>
+<body>
+<h1>Combos, Fatalities y Brutalities – Mortal Kombat XL</h1>
+
+<select id="characterSelect" aria-label="Seleccionar personaje">
+  <option value="">Seleccioná un personaje</option>
+</select>
+
+<div class="container" id="comboContainer" style="display:none;">
+  <div>
+    <div class="section-title">Combo</div>
+    <div id="comboText" class="combo-text"></div>
+  </div>
+  <div>
+    <div class="section-title">🎯 Fatality (distancia)</div>
+    <div id="fatalityText" class="fatality-text" style="color:#e74c3c;"></div>
+  </div>
+  <div>
+    <div class="section-title">💥 Brutality (condiciones y botones)</div>
+    <div id="brutalityText" class="brutality-text" style="color:#f1c40f;"></div>
+  </div>
+</div>
+
+<script>
+// Definimos el array characters antes de usarlo
+const characters = [
+  {
+    id: "alien",
+    name: "Alien (Tarkatan)",
+    comboDamage: "60%",
+    combo: [
+      ['→', '+', '▲', '▲', ',', '■', ',', '↓→', '+', '●'],
+      ['↑', '+', '■'],
+      ['←', '+', '■', ',', '■', ',', '↓→', '+', '●']
+    ],
+    fatality: {
+      distance: "Media",
+      combo: ['←', '→', '↓', '●', '(Deadly Sting)']
+    },
+    brutality: {
+      distance: "Cercana",
+      condition: "Mantener ↓ durante el último golpe (Back Stabber)",
+      combo: ['←', '■', ',', '■', ',', '▲']
+    }
+  },
+  {
+    id: "tanya",
+    name: "Tanya (Kobu Jutsu)",
+    comboDamage: "45%",
+    combo: [
+      ['←', '+', '●', ',', '■', ',', 'R2', '+', '↓←', '+', '●'],
+      ['Corre:', '→', '+', '●', ',', '■', ',', 'Drill Kick']
+    ],
+    fatality: {
+      distance: "Lejos",
+      combo: ['→', '←', '→', '▲', '(Edenian Guillotine)']
+    },
+    brutality: {
+      distance: "Media",
+      condition: "Equipar Kobu Jutsu y terminar con Drill Kick",
+      combo: ['↓←', '+', '●']
+    }
+  },
+  {
+    id: "liukang",
+    name: "Liu Kang (Dragon’s Fire)",
+    comboDamage: "55%",
+    combo: [
+      ['■', ',', '■', ', cancelar con', '↓→', '+', '■'],
+      ['←', '+', '▲', ', cancelar otra vez'],
+      ['✖', ',', '✖', ', cancelar y terminar con', '↓→', '+', '●']
+    ],
+    fatality: {
+      distance: "Cercana",
+      combo: ['↓', '←', '→', '■', '(Burn Out)']
+    },
+    brutality: {
+      distance: "Cercana",
+      condition: "Terminar con Flying Dragon Kick y mantener →",
+      combo: ['↓→', '+', '▲']
+    }
+  }
+  // Agrega aquí el resto de personajes siguiendo el mismo formato
+];
+
+// Referencias DOM
+const select = document.getElementById('characterSelect');
+const comboContainer = document.getElementById('comboContainer');
+const comboText = document.getElementById('comboText');
+const fatalityText = document.getElementById('fatalityText');
+const brutalityText = document.getElementById('brutalityText');
+
+// Función para renderizar líneas de combos/fatalities/brutalities
+function renderComboLines(lines) {
+  return lines.map(line => line.join(' ')).join('\n');
+}
+
+// Poblamos el select al cargar DOM
+document.addEventListener('DOMContentLoaded', () => {
+  characters.forEach(character => {
+    const option = document.createElement('option');
+    option.value = character.id;
+    option.textContent = `${character.name} (${character.comboDamage})`;
+    select.appendChild(option);
+  });
+});
+
+// Evento cambio de selección
+select.addEventListener('change', () => {
+  const selectedId = select.value;
+  if (!selectedId) {
+    comboContainer.style.display = 'none';
+    return;
+  }
+  const character = characters.find(c => c.id === selectedId);
+  if (!character) return;
+  comboContainer.style.display = 'block';
+  comboText.textContent = renderComboLines(character.combo);
+  fatalityText.textContent = `Distancia: ${character.fatality.distance}\n` + renderComboLines([character.fatality.combo]);
+  brutalityText.textContent = `Distancia: ${character.brutality.distance}\nCondición: ${character.brutality.condition}\n` + renderComboLines([character.brutality.combo]);
+});
+</script>
+
+</body>
+</html>
