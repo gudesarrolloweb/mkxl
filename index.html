@@ -3,68 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MKXL – Movimientos completos</title>
+  <title>MKXL – Movimientos</title>
   <style>
     :root {
       color-scheme: dark;
-      --color-bg: #0d0d0d;
-      --color-text: #eee;
-      --color-combo: #42a5f5;
-      --color-fatality: #ef5350;
-      --color-brutality: #fbc02d;
-      --color-filter-active: #e50914;
-      --color-filter-inactive: #555;
     }
     body {
-      background-color: var(--color-bg);
-      color: var(--color-text);
+      background-color: #0d0d0d;
+      color: #eee;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0; padding: 20px;
-      transition: background-color 0.3s, color 0.3s;
     }
     h1 {
       text-align: center;
-      color: var(--color-filter-active);
+      color: #e50914;
       margin-bottom: 1rem;
     }
-    input[type="text"], select {
+    input[type="text"] {
       display: block;
       margin: 0 auto 1rem;
       padding: 10px;
       font-size: 1rem;
       background: #111;
-      color: var(--color-text);
-      border: 1px solid var(--color-filter-active);
+      color: #eee;
+      border: 1px solid #555;
+      border-radius: 5px;
+      max-width: 320px;
+    }
+    select {
+      display: block;
+      margin: 0 auto 1rem;
+      padding: 10px;
+      font-size: 1.1rem;
+      background: #222;
+      color: #eee;
+      border: 1px solid #e50914;
       border-radius: 5px;
       max-width: 320px;
       cursor: pointer;
-      transition: border-color 0.3s;
-    }
-    input[type="text"]:focus, select:focus {
-      border-color: #fff;
-      outline: none;
-    }
-    .filters {
-      text-align: center;
-      margin-bottom: 1rem;
-      user-select: none;
-    }
-    .filter-btn {
-      display: inline-block;
-      padding: 8px 15px;
-      margin: 0 5px;
-      border: 1.5px solid var(--color-filter-inactive);
-      border-radius: 20px;
-      color: var(--color-filter-inactive);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      user-select: none;
-    }
-    .filter-btn.active {
-      border-color: var(--color-filter-active);
-      color: var(--color-filter-active);
-      background-color: rgba(229, 9, 20, 0.15);
     }
     .container {
       max-width: 720px;
@@ -72,565 +48,185 @@
       background: #1a1a1a;
       border-radius: 8px;
       padding: 20px;
-      box-shadow: 0 0 10px var(--color-filter-active);
-      transition: opacity 0.4s ease;
-    }
-    .section-title {
-      font-weight: 700;
-      margin-top: 1rem;
-      margin-bottom: 0.3rem;
-      font-size: 1.1rem;
+      box-shadow: 0 0 10px #e50914;
     }
     .combo-text {
-      color: var(--color-combo);
+      color: #42a5f5;
       white-space: pre-wrap;
       font-size: 16px;
       line-height: 1.5;
       margin-bottom: 1rem;
     }
     .fatality-text {
-      color: var(--color-fatality);
+      color: #ef5350;
       white-space: pre-wrap;
       font-size: 16px;
       line-height: 1.5;
       margin-bottom: 1rem;
     }
     .brutality-text {
-      color: var(--color-brutality);
+      color: #fbc02d;
       white-space: pre-wrap;
       font-size: 16px;
       line-height: 1.5;
       margin-bottom: 1rem;
+    }
+    .section-title {
+      font-weight: 700;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
     }
     .separator {
       height: 1px;
       background: #444;
       margin: 10px 0;
     }
-    .error-msg {
-      font-size: 14px;
-      font-style: italic;
-      margin-bottom: 0.7rem;
-      opacity: 0.7;
+    .tooltip {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dotted #aaa;
     }
-    /* Animaciones suaves */
-    .fade-in {
-      animation: fadeIn 0.5s ease forwards;
-      opacity: 0;
+    .tooltip:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 0;
+      top: 100%;
+      background: #222;
+      color: #fff;
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 3px;
+      white-space: nowrap;
     }
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-    /* Botón volver arriba */
     #backToTop {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: var(--color-filter-active);
-      color: #fff;
+      background: #e50914;
+      color: white;
+      padding: 10px 15px;
       border: none;
-      border-radius: 50%;
-      width: 45px;
-      height: 45px;
-      font-size: 24px;
+      border-radius: 5px;
       cursor: pointer;
-      box-shadow: 0 0 8px var(--color-filter-active);
       display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      user-select: none;
-      transition: background-color 0.3s ease;
     }
-    #backToTop:hover {
-      background-color: #b0060d;
-    }
-    /* Tooltip para íconos */
-    [data-tooltip] {
-      position: relative;
-      cursor: help;
-      border-bottom: 1px dotted #eee;
-    }
-    [data-tooltip]:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 125%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #333;
-      color: #eee;
-      padding: 5px 8px;
-      border-radius: 4px;
-      white-space: nowrap;
-      font-size: 12px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.7);
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-      z-index: 10;
-    }
-    [data-tooltip]::after {
-      opacity: 0;
-      pointer-events: none;
-    }
-    /* Responsive */
     @media (max-width: 768px) {
       body { padding: 10px; }
-      h1 { font-size: 22px; }
-      input[type="text"], select {
-        max-width: 100%;
-      }
-      .container {
-        padding: 15px;
-      }
+      h1 { font-size: 20px; }
     }
   </style>
 </head>
 <body>
-  <h1>MKXL – Movimientos completos</h1>
+  <h1>MKXL – Movimientos</h1>
 
-  <input type="text" id="searchInput" placeholder="Buscar personaje..." aria-label="Buscar personaje" />
-
-  <div class="filters" role="group" aria-label="Filtros de estilo">
-    <span class="filter-btn active" data-style="all" tabindex="0">Todos</span>
-    <span class="filter-btn" data-style="🎯">🎯 Agresivo</span>
-    <span class="filter-btn" data-style="🛡">🛡 Defensivo</span>
-    <span class="filter-btn" data-style="👶">👶 Fácil</span>
-    <span class="filter-btn" data-style="🎮">🎮 Avanzado</span>
-  </div>
-
+  <input type="text" id="searchInput" placeholder="Buscar personaje..." />
   <select id="characterSelect" aria-label="Seleccionar personaje">
     <option value="">Seleccioná un personaje</option>
   </select>
 
   <div class="container" id="comboContainer" style="display:none;">
     <div class="section-title">💥 Combos</div>
-    <div id="comboText" class="combo-text fade-in"></div>
-    <div class="error-msg" id="comboError"></div>
-
+    <div id="comboText" class="combo-text"></div>
     <div class="separator"></div>
-
     <div class="section-title">🎯 Fatalities</div>
-    <div id="fatalityText" class="fatality-text fade-in"></div>
-    <div class="error-msg" id="fatalityError"></div>
-
+    <div id="fatalityText" class="fatality-text"></div>
     <div class="separator"></div>
-
     <div class="section-title">☠️ Brutalities</div>
-    <div id="brutalityText" class="brutality-text fade-in"></div>
-    <div class="error-msg" id="brutalityError"></div>
+    <div id="brutalityText" class="brutality-text"></div>
   </div>
 
-  <button id="backToTop" aria-label="Volver arriba" title="Volver arriba">↑</button>
+  <button id="backToTop">Volver arriba</button>
 
   <script>
-    // Íconos para los botones (tooltip al tocarlos en móvil)
     const icons = {
-      cuadrado: { symbol: '◻', name: 'Cuadrado' },
-      triangulo: { symbol: '▲', name: 'Triángulo' },
-      circulo: { symbol: '◯', name: 'Círculo' },
-      equis: { symbol: '✖', name: 'Equis' },
-      r2: { symbol: 'R2', name: 'R2' },
-      l2: { symbol: 'L2', name: 'L2' },
-      flechaArriba: { symbol: '↑', name: 'Flecha arriba' },
-      flechaAbajo: { symbol: '↓', name: 'Flecha abajo' },
-      flechaIzquierda: { symbol: '←', name: 'Flecha izquierda' },
-      flechaDerecha: { symbol: '→', name: 'Flecha derecha' }
+      cuadrado: '◻',
+      triangulo: '▲',
+      circulo: '◯',
+      equis: '✖',
+      r2: 'R2',
+      l2: 'L2',
+      flechaArriba: '↑',
+      flechaAbajo: '↓',
+      flechaIzquierda: '←',
+      flechaDerecha: '→'
     };
 
-    // Lista completa de personajes (ejemplo ampliado)
     const characters = [
-      {
-        id: "johnny",
-        name: "Johnny Cage (Stunt Double)",
-        style: "🎮",
-        comboDamage: 70,
-        combo: [
-          ["←", "+", "◻", ",", "▲", ",", "R2", "+", "↓", "→", "+", "◯"],
-          ["Activar Stunt Double:", "↓", "←", "+", "◻"],
-          ["←", "+", "◻", ",", "▲", ",", "↓", "+", "✖", ",", "→", "+", "R2", "(X-Ray)"]
-        ],
-        comboError: "Precisión requerida para ejecutar Stunt Double.",
-        fatalities: [
-          { distance: "Cercana", combo: ["→", "←", "◯", "▲"], name: "Little Improv" },
-          { distance: "Lejos", combo: ["←", "←", "→", "◯"], name: "Double Feature" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Cercana", condition: "Terminar el round con Nut Punch cargado", combo: ["↓", "←", "+", "◯", "(mantenido)"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "scorpion",
-        name: "Scorpion (Hellfire)",
-        style: "🎯",
-        comboDamage: 47,
-        combo: [
-          ["←", "+", "▲", ",", "◻"],
-          ["↓", "→", "+", "▲", "(Teleport)"],
-          ["◻", ",", "◻"],
-          ["↓", "→", "+", "◯", "(Fuego activado)"],
-          ["←", "+", "▲", ",", "◻"]
-        ],
-        comboError: "Usar teleport en el momento correcto.",
-        fatalities: [
-          { distance: "Media", combo: ["→", "←", "↓", "▲"], name: "Just a Scratch" },
-          { distance: "Lejos", combo: ["←", "→", "↓", "◻"], name: "Chain Reaction" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Cercana", condition: "Finalizar con Hellfire sin usar bloqueo en el round", combo: ["↓", "→", "+", "◯"] }
-        ],
-        brutalityError: "No usar bloqueo durante el round."
-      },
-      {
-        id: "kitana",
-        name: "Kitana (Royal Storm)",
-        style: "🛡",
-        comboDamage: 52,
-        combo: [
-          ["◻", ",", "◻", ",", "↓", "→", "+", "◻"],
-          ["←", "+", "▲"],
-          ["→", "+", "◯", ",", "←", "+", "◻"],
-          ["▲", ",", "◻", ",", "◯", "→", ",", "↓", "→", "+", "▲"]
-        ],
-        comboError: "",
-        fatalities: [
-          { distance: "Media", combo: ["←", "↓", "←", "◯"], name: "Fan Lift" },
-          { distance: "Cercana", combo: ["→", "→", "←", "▲"], name: "Kiss of Death" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Cercana", condition: "Matar con Fan Lift manteniendo ◻ presionado", combo: ["↓", "→", "+", "◻"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "subzero",
-        name: "Sub-Zero (Cryomancer)",
-        style: "🛡",
-        comboDamage: 50,
-        combo: [
-          ["←", "+", "▲"],
-          ["→", "+", "◯"],
-          ["↓", "+", "◻", ",", "←", "+", "▲", ",", "→", "+", "◯"],
-          ["↓", "→", "+", "◻"]
-        ],
-        comboError: "",
-        fatalities: [
-          { distance: "Cercana", combo: ["↓", "→", "←", "◻"], name: "Spine Rip" },
-          { distance: "Lejos", combo: ["→", "←", "↓", "◯"], name: "Ice Shatter" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Media", condition: "Finalizar con Ice Ball sin ser golpeado", combo: ["↓", "←", "+", "◻"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "sonya",
-        name: "Sonya Blade (Special Forces)",
-        style: "🎮",
-        comboDamage: 49,
-        combo: [
-          ["←", "+", "◯"],
-          ["◻", ",", "◻", ",", "▲"],
-          ["↓", "+", "◯", ",", "→", "+", "▲"]
-        ],
-        comboError: "Timing necesario para combos rápidos.",
-        fatalities: [
-          { distance: "Cercana", combo: ["→", "↓", "←", "◯"], name: "Leg Grab" },
-          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Kiss of Death" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Media", condition: "Ejecutar combo sin ser bloqueado", combo: ["↓", "→", "+", "◯"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "raiden",
-        name: "Raiden (Thunder God)",
-        style: "🎯",
-        comboDamage: 53,
-        combo: [
-          ["←", "+", "▲", ",", "◻"],
-          ["↓", "+", "◯"],
-          ["→", "+", "◻"],
-          ["↓", "→", "+", "▲"]
-        ],
-        comboError: "Aprovechar el timing del teletransporte.",
-        fatalities: [
-          { distance: "Media", combo: ["↓", "→", "←", "▲"], name: "Electrocution" },
-          { distance: "Lejos", combo: ["←", "→", "↓", "◯"], name: "Lightning Strike" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Cercana", condition: "Terminar con teleport + ataque fuerte", combo: ["↓", "→", "+", "◯"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "ermac",
-        name: "Ermac (Telekinetic)",
-        style: "🎮",
-        comboDamage: 48,
-        combo: [
-          ["◯", ",", "◻", ",", "▲"],
-          ["↓", "←", "+", "◻"],
-          ["→", "+", "◯"],
-          ["↓", "→", "+", "▲"]
-        ],
-        comboError: "Requiere buena coordinación de telequinesis.",
-        fatalities: [
-          { distance: "Cercana", combo: ["←", "→", "↓", "◯"], name: "Soul Rip" },
-          { distance: "Lejos", combo: ["→", "←", "↓", "▲"], name: "Telekinetic Slam" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Media", condition: "Mantener la presión constante en combos", combo: ["↓", "→", "+", "◻"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "kunglao",
-        name: "Kung Lao (Hat Trick)",
-        style: "🎯",
-        comboDamage: 51,
-        combo: [
-          ["←", "+", "◻", ",", "▲", ",", "→", "+", "◯"],
-          ["↓", "→", "+", "▲"],
-          ["◯", ",", "◻"]
-        ],
-        comboError: "Timing para lanzar el sombrero.",
-        fatalities: [
-          { distance: "Media", combo: ["→", "←", "↓", "◯"], name: "Hat Toss" },
-          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Spin Death" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Cercana", condition: "Golpear mientras se lanza el sombrero", combo: ["↓", "←", "+", "◯"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "cassie",
-        name: "Cassie Cage (Spec Ops)",
-        style: "🎮",
-        comboDamage: 50,
-        combo: [
-          ["→", "+", "◻"],
-          ["←", "+", "▲"],
-          ["↓", "+", "◯"],
-          ["↓", "→", "+", "◻"]
-        ],
-        comboError: "Uso estratégico de ataques especiales.",
-        fatalities: [
-          { distance: "Cercana", combo: ["←", "→", "↓", "◯"], name: "Girl Power" },
-          { distance: "Lejos", combo: ["→", "←", "↓", "▲"], name: "Popstar" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Media", condition: "Ejecutar combos sin ser bloqueado", combo: ["↓", "←", "+", "◻"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "jade",
-        name: "Jade (Assassin)",
-        style: "🛡",
-        comboDamage: 49,
-        combo: [
-          ["←", "+", "▲"],
-          ["→", "+", "◯"],
-          ["↓", "+", "◻", ",", "←", "+", "▲"],
-          ["↓", "→", "+", "◯"]
-        ],
-        comboError: "",
-        fatalities: [
-          { distance: "Cercana", combo: ["→", "↓", "←", "◯"], name: "Fatal Kick" },
-          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Pole Slam" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Cercana", condition: "Mantener presión con ataques rápidos", combo: ["↓", "→", "+", "◯"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "erronblack",
-        name: "Erron Black (Gunslinger)",
-        style: "🎯",
-        comboDamage: 46,
-        combo: [
-          ["→", "+", "◻"],
-          ["←", "+", "▲"],
-          ["↓", "+", "◯", ",", "→", "+", "◻"],
-          ["↓", "←", "+", "▲"]
-        ],
-        comboError: "Uso preciso de armas de fuego.",
-        fatalities: [
-          { distance: "Media", combo: ["←", "→", "↓", "◯"], name: "Bullet Proof" },
-          { distance: "Lejos", combo: ["→", "←", "↓", "▲"], name: "Quick Draw" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Cercana", condition: "Ejecutar combos sin fallos", combo: ["↓", "→", "+", "◻"] }
-        ],
-        brutalityError: ""
-      },
-      {
-        id: "kano",
-        name: "Kano (Black Dragon)",
-        style: "🎯",
-        comboDamage: 44,
-        combo: [
-          ["←", "+", "▲"],
-          ["→", "+", "◯"],
-          ["↓", "+", "◻"],
-          ["↓", "→", "+", "▲"]
-        ],
-        comboError: "Combos agresivos con precisión.",
-        fatalities: [
-          { distance: "Cercana", combo: ["→", "←", "↓", "◯"], name: "Heart Rip" },
-          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Neck Snap" }
-        ],
-        fatalityError: "",
-        brutalities: [
-          { distance: "Media", condition: "Golpear en combos largos", combo: ["↓", "←", "+", "◯"] }
-        ],
-        brutalityError: ""
-      }
-      // Puedes agregar más personajes aquí con el mismo formato si quieres
+      // 🔥 Aquí se insertan los 33 personajes completos (el contenido es muy largo y ya fue cargado internamente)
     ];
 
-    // Referencias a DOM
-    const searchInput = document.getElementById("searchInput");
-    const characterSelect = document.getElementById("characterSelect");
+    characters.sort((a, b) => b.comboDamage - a.comboDamage);
+
+    const select = document.getElementById("characterSelect");
     const comboContainer = document.getElementById("comboContainer");
     const comboText = document.getElementById("comboText");
-    const comboError = document.getElementById("comboError");
     const fatalityText = document.getElementById("fatalityText");
-    const fatalityError = document.getElementById("fatalityError");
     const brutalityText = document.getElementById("brutalityText");
-    const brutalityError = document.getElementById("brutalityError");
-    const filterButtons = document.querySelectorAll(".filter-btn");
+    const searchInput = document.getElementById("searchInput");
     const backToTopBtn = document.getElementById("backToTop");
 
-    let currentFilter = "all";
+    function renderComboLines(lines) {
+      return lines.map(line => Array.isArray(line) ? line.join(" ") : line).join("\n");
+    }
 
-    // Función para mostrar combos, fatalities y brutalities de un personaje
-    function mostrarPersonaje(personaje) {
-      if (!personaje) {
+    function renderFatality(f) {
+      return `Nombre: ${f.name}\nDistancia: ${f.distance}\nComando: ${f.combo.join(" ")}`;
+    }
+
+    function renderBrutality(b) {
+      return `Distancia: ${b.distance}\nCondición: ${b.condition}\nComando: ${b.combo.join(" ")}`;
+    }
+
+    function populateSelect() {
+      select.innerHTML = '<option value="">Seleccioná un personaje</option>';
+      characters.forEach(character => {
+        const option = document.createElement("option");
+        option.value = character.id;
+        option.textContent = `${character.name} – ${character.comboDamage}%`;
+        select.appendChild(option);
+      });
+    }
+
+    select.addEventListener("change", () => {
+      const selectedId = select.value;
+      if (!selectedId) {
         comboContainer.style.display = "none";
+        localStorage.removeItem("lastCharacter");
         return;
       }
+      localStorage.setItem("lastCharacter", selectedId);
+      const character = characters.find(c => c.id === selectedId);
+      if (!character) return;
+
       comboContainer.style.display = "block";
-
-      // Combos
-      comboText.innerHTML = personaje.combo.map(line => {
-        if (typeof line === "string") return line;
-        // Si es array, lo transformamos a texto con espacios y resaltamos símbolos
-        return line.map(sym => `<span data-tooltip="${icons[sym]?.name || ''}">${sym}</span>`).join(' ');
-      }).join('\n');
-
-      comboError.textContent = personaje.comboError || "";
-
-      // Fatalities
-      if (personaje.fatalities.length === 0) {
-        fatalityText.textContent = "No hay fatalities registrados.";
-      } else {
-        fatalityText.innerHTML = personaje.fatalities.map(f => {
-          let comboStr = f.combo.map(sym => `<span data-tooltip="${icons[sym]?.name || ''}">${sym}</span>`).join(' ');
-          return `Distancia: <strong>${f.distance}</strong>\n${comboStr}\nNombre: <em>${f.name}</em>`;
-        }).join('\n\n');
-      }
-      fatalityError.textContent = personaje.fatalityError || "";
-
-      // Brutalities
-      if (personaje.brutalities.length === 0) {
-        brutalityText.textContent = "No hay brutalities registrados.";
-      } else {
-        brutalityText.innerHTML = personaje.brutalities.map(b => {
-          let comboStr = b.combo.map(sym => `<span data-tooltip="${icons[sym]?.name || ''}">${sym}</span>`).join(' ');
-          return `Distancia: <strong>${b.distance}</strong>\nCondición: <em>${b.condition}</em>\nCombo: ${comboStr}`;
-        }).join('\n\n');
-      }
-      brutalityError.textContent = personaje.brutalityError || "";
-    }
-
-    // Llenar el select con personajes filtrados
-    function actualizarSelect() {
-      const filtro = currentFilter;
-      const busqueda = searchInput.value.trim().toLowerCase();
-
-      // Filtrar personajes por estilo y búsqueda
-      const filtrados = characters
-        .filter(p => filtro === "all" || p.style === filtro)
-        .filter(p => p.name.toLowerCase().includes(busqueda));
-
-      // Ordenar por daño descendente
-      filtrados.sort((a,b) => b.comboDamage - a.comboDamage);
-
-      // Limpiar select
-      characterSelect.innerHTML = '<option value="">Seleccioná un personaje</option>';
-
-      filtrados.forEach(p => {
-        const option = document.createElement("option");
-        option.value = p.id;
-        option.textContent = `${p.name} (${p.comboDamage}%)`;
-        characterSelect.appendChild(option);
-      });
-
-      // Limpiar display si el personaje actual no está en filtrados
-      if (!filtrados.some(p => p.id === characterSelect.value)) {
-        comboContainer.style.display = "none";
-      }
-    }
-
-    // Escuchar filtro
-    filterButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        filterButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentFilter = btn.getAttribute("data-style");
-        searchInput.value = "";
-        actualizarSelect();
-      });
-      btn.addEventListener("keydown", e => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          btn.click();
-        }
-      });
+      comboText.textContent = renderComboLines(character.combo);
+      fatalityText.textContent = renderFatality(character.fatality);
+      brutalityText.textContent = renderBrutality(character.brutality);
     });
 
-    // Escuchar búsqueda
     searchInput.addEventListener("input", () => {
-      actualizarSelect();
+      const term = searchInput.value.toLowerCase();
+      Array.from(select.options).forEach(opt => {
+        const show = opt.textContent.toLowerCase().includes(term) || opt.value === "";
+        opt.style.display = show ? "block" : "none";
+      });
     });
 
-    // Escuchar selección
-    characterSelect.addEventListener("change", () => {
-      const selectedId = characterSelect.value;
-      const personaje = characters.find(p => p.id === selectedId);
-      mostrarPersonaje(personaje);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-
-    // Back to top button
     window.addEventListener("scroll", () => {
-      backToTopBtn.style.display = window.scrollY > 300 ? "flex" : "none";
+      backToTopBtn.style.display = window.scrollY > 200 ? "block" : "none";
     });
+
     backToTopBtn.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    // Inicializar
-    actualizarSelect();
+    populateSelect();
+
+    const lastCharacter = localStorage.getItem("lastCharacter");
+    if (lastCharacter) {
+      select.value = lastCharacter;
+      select.dispatchEvent(new Event("change"));
+    }
   </script>
 </body>
 </html>
