@@ -1,651 +1,636 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MKXL – Movimientos</title>
-<style>
-  :root {
-    --color-bg: #0d0d0d;
-    --color-text: #eee;
-    --color-combo: #42a5f5;
-    --color-fatality: #ef5350;
-    --color-brutality: #fbc02d;
-    --color-border: #e50914;
-    --color-separator: #444;
-  }
-  body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0; padding: 20px;
-    scroll-behavior: smooth;
-  }
-  h1 {
-    text-align: center;
-    color: var(--color-border);
-    margin-bottom: 1rem;
-  }
-  input[type="text"], select {
-    display: block;
-    margin: 0 auto 1rem;
-    padding: 10px;
-    font-size: 1rem;
-    background: #111;
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-    border-radius: 5px;
-    max-width: 320px;
-  }
-  select {
-    font-size: 1.1rem;
-    cursor: pointer;
-  }
-  .container {
-    max-width: 720px;
-    margin: 0 auto;
-    background: #1a1a1a;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 10px var(--color-border);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  .container.visible {
-    opacity: 1;
-  }
-  .section-title {
-    font-weight: 700;
-    margin-top: 1rem;
-    margin-bottom: 0.3rem;
-  }
-  #comboText {
-    color: var(--color-combo);
-    white-space: pre-wrap;
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-  }
-  #fatalityText {
-    color: var(--color-fatality);
-    white-space: pre-wrap;
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-  }
-  #brutalityText {
-    color: var(--color-brutality);
-    white-space: pre-wrap;
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-  }
-  .separator {
-    height: 1px;
-    background: var(--color-separator);
-    margin: 10px 0;
-  }
-  /* Filter tags */
-  #filterTags {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  .filter-tag {
-    cursor: pointer;
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 15px;
-    background: #222;
-    color: var(--color-text);
-    margin: 0 5px;
-    user-select: none;
-    border: 1px solid transparent;
-    transition: background 0.3s, border-color 0.3s;
-  }
-  .filter-tag.selected {
-    background: var(--color-border);
-    border-color: var(--color-text);
-  }
-  /* Tooltip */
-  .tooltip {
-    position: relative;
-    cursor: help;
-    border-bottom: 1px dotted var(--color-text);
-  }
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: max-content;
-    max-width: 220px;
-    background-color: #222;
-    color: var(--color-text);
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 0.9rem;
-  }
-  .tooltip:hover .tooltiptext,
-  .tooltip:focus .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
-  /* Scroll to top button */
-  #scrollTopBtn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: var(--color-border);
-    color: var(--color-text);
-    border: none;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 0 10px var(--color-border);
-    display: none;
-    z-index: 999;
-  }
-  #scrollTopBtn.show {
-    display: block;
-  }
-  /* Fullscreen toggle button */
-  #fullscreenBtn {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: var(--color-border);
-    color: var(--color-text);
-    border: none;
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 0 10px var(--color-border);
-    z-index: 999;
-  }
-  /* Responsive */
-  @media (max-width: 768px) {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MKXL – Movimientos completos</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --color-bg: #0d0d0d;
+      --color-text: #eee;
+      --color-combo: #42a5f5;
+      --color-fatality: #ef5350;
+      --color-brutality: #fbc02d;
+      --color-filter-active: #e50914;
+      --color-filter-inactive: #555;
+    }
     body {
-      padding: 10px;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; padding: 20px;
+      transition: background-color 0.3s, color 0.3s;
     }
     h1 {
-      font-size: 20px;
+      text-align: center;
+      color: var(--color-filter-active);
+      margin-bottom: 1rem;
     }
-  }
-</style>
+    input[type="text"], select {
+      display: block;
+      margin: 0 auto 1rem;
+      padding: 10px;
+      font-size: 1rem;
+      background: #111;
+      color: var(--color-text);
+      border: 1px solid var(--color-filter-active);
+      border-radius: 5px;
+      max-width: 320px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus, select:focus {
+      border-color: #fff;
+      outline: none;
+    }
+    .filters {
+      text-align: center;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+    .filter-btn {
+      display: inline-block;
+      padding: 8px 15px;
+      margin: 0 5px;
+      border: 1.5px solid var(--color-filter-inactive);
+      border-radius: 20px;
+      color: var(--color-filter-inactive);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      user-select: none;
+    }
+    .filter-btn.active {
+      border-color: var(--color-filter-active);
+      color: var(--color-filter-active);
+      background-color: rgba(229, 9, 20, 0.15);
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px var(--color-filter-active);
+      transition: opacity 0.4s ease;
+    }
+    .section-title {
+      font-weight: 700;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+    }
+    .combo-text {
+      color: var(--color-combo);
+      white-space: pre-wrap;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .fatality-text {
+      color: var(--color-fatality);
+      white-space: pre-wrap;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .brutality-text {
+      color: var(--color-brutality);
+      white-space: pre-wrap;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .separator {
+      height: 1px;
+      background: #444;
+      margin: 10px 0;
+    }
+    .error-msg {
+      font-size: 14px;
+      font-style: italic;
+      margin-bottom: 0.7rem;
+      opacity: 0.7;
+    }
+    /* Animaciones suaves */
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+    /* Botón volver arriba */
+    #backToTop {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--color-filter-active);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--color-filter-active);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    #backToTop:hover {
+      background-color: #b0060d;
+    }
+    /* Tooltip para íconos */
+    [data-tooltip] {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dotted #eee;
+    }
+    [data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #eee;
+      padding: 5px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      font-size: 12px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.7);
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+    [data-tooltip]::after {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      h1 { font-size: 22px; }
+      input[type="text"], select {
+        max-width: 100%;
+      }
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>MKXL – Movimientos</h1>
+  <h1>MKXL – Movimientos completos</h1>
 
   <input type="text" id="searchInput" placeholder="Buscar personaje..." aria-label="Buscar personaje" />
 
-  <div id="filterTags" role="list" aria-label="Filtrar por estilo">
-    <span class="filter-tag selected" data-style="all" role="listitem" tabindex="0">Todos</span>
-    <span class="filter-tag" data-style="agresivo" role="listitem" tabindex="0">🎯 Agresivo</span>
-    <span class="filter-tag" data-style="defensivo" role="listitem" tabindex="0">🛡 Defensivo</span>
-    <span class="filter-tag" data-style="facil" role="listitem" tabindex="0">👶 Fácil</span>
-    <span class="filter-tag" data-style="avanzado" role="listitem" tabindex="0">🎮 Avanzado</span>
+  <div class="filters" role="group" aria-label="Filtros de estilo">
+    <span class="filter-btn active" data-style="all" tabindex="0">Todos</span>
+    <span class="filter-btn" data-style="🎯">🎯 Agresivo</span>
+    <span class="filter-btn" data-style="🛡">🛡 Defensivo</span>
+    <span class="filter-btn" data-style="👶">👶 Fácil</span>
+    <span class="filter-btn" data-style="🎮">🎮 Avanzado</span>
   </div>
 
   <select id="characterSelect" aria-label="Seleccionar personaje">
     <option value="">Seleccioná un personaje</option>
   </select>
 
-  <div class="container" id="comboContainer" aria-live="polite" aria-atomic="true" style="display:none;">
+  <div class="container" id="comboContainer" style="display:none;">
     <div class="section-title">💥 Combos</div>
-    <div id="comboText"></div>
+    <div id="comboText" class="combo-text fade-in"></div>
+    <div class="error-msg" id="comboError"></div>
+
     <div class="separator"></div>
+
     <div class="section-title">🎯 Fatalities</div>
-    <div id="fatalityText"></div>
+    <div id="fatalityText" class="fatality-text fade-in"></div>
+    <div class="error-msg" id="fatalityError"></div>
+
     <div class="separator"></div>
+
     <div class="section-title">☠️ Brutalities</div>
-    <div id="brutalityText"></div>
-    <div class="separator"></div>
-    <div class="section-title">❓ Glosario</div>
-    <div id="glossaryText" style="font-size: 14px; line-height: 1.4; color: #bbb;">
-      <b>Cancelar</b>: Interrumpir un movimiento para encadenar otro.<br/>
-      <b>EX</b>: Movimiento especial mejorado.<br/>
-      <b>X-Ray</b>: Movimiento especial que causa daño alto.<br/>
-      <b>Dash</b>: Correr rápido hacia adelante.<br/>
-      <b>Tooltip</b>: Información extra que aparece al pasar el cursor o tocar un símbolo.<br/>
-    </div>
+    <div id="brutalityText" class="brutality-text fade-in"></div>
+    <div class="error-msg" id="brutalityError"></div>
   </div>
 
-  <button id="scrollTopBtn" aria-label="Volver arriba" title="Volver arriba">⬆️</button>
-  <button id="fullscreenBtn" aria-label="Pantalla completa" title="Pantalla completa">🖥️</button>
+  <button id="backToTop" aria-label="Volver arriba" title="Volver arriba">↑</button>
 
-<script>
-  // Iconos con tooltip info para móvil y desktop
-  const icons = {
-    cuadrado: { symbol: '◻', desc: 'Cuadrado' },
-    triangulo: { symbol: '▲', desc: 'Triángulo' },
-    circulo: { symbol: '◯', desc: 'Círculo' },
-    equis: { symbol: '✖', desc: 'Equis' },
-    r2: { symbol: 'R2', desc: 'Botón R2' },
-    l2: { symbol: 'L2', desc: 'Botón L2' },
-    flechaArriba: { symbol: '↑', desc: 'Flecha Arriba' },
-    flechaAbajo: { symbol: '↓', desc: 'Flecha Abajo' },
-    flechaIzquierda: { symbol: '←', desc: 'Flecha Izquierda' },
-    flechaDerecha: { symbol: '→', desc: 'Flecha Derecha' },
-    dash: { symbol: 'Dash', desc: 'Correr rápido hacia adelante' }
-  };
+  <script>
+    // Íconos para los botones (tooltip al tocarlos en móvil)
+    const icons = {
+      cuadrado: { symbol: '◻', name: 'Cuadrado' },
+      triangulo: { symbol: '▲', name: 'Triángulo' },
+      circulo: { symbol: '◯', name: 'Círculo' },
+      equis: { symbol: '✖', name: 'Equis' },
+      r2: { symbol: 'R2', name: 'R2' },
+      l2: { symbol: 'L2', name: 'L2' },
+      flechaArriba: { symbol: '↑', name: 'Flecha arriba' },
+      flechaAbajo: { symbol: '↓', name: 'Flecha abajo' },
+      flechaIzquierda: { symbol: '←', name: 'Flecha izquierda' },
+      flechaDerecha: { symbol: '→', name: 'Flecha derecha' }
+    };
 
-  // Personajes, todos con estilo, mejor variante, daño, combos, fatalities, brutalities y errores comunes
-  const characters = [
-    {
-      id: "johnny",
-      name: "Johnny Cage (Stunt Double)",
-      comboDamage: 70,
-      style: "agresivo",
-      description: "Personaje ágil con ataques rápidos y poderosos.",
-      combo: [
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol, ",", icons.r2.symbol, "+", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol],
-        ["Activar Stunt Double:", icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol, ",", icons.flechaAbajo.symbol, "+", icons.equis.symbol, ",", icons.flechaDerecha.symbol, "+", icons.r2.symbol, "(X-Ray)"]
-      ],
-      fatality: {
-        name: "(Little Improv)",
-        distance: "Cercana",
-        combo: [icons.flechaDerecha.symbol, icons.flechaIzquierda.symbol, icons.circulo.symbol, icons.triangulo.symbol]
+    // Lista completa de personajes (ejemplo ampliado)
+    const characters = [
+      {
+        id: "johnny",
+        name: "Johnny Cage (Stunt Double)",
+        style: "🎮",
+        comboDamage: 70,
+        combo: [
+          ["←", "+", "◻", ",", "▲", ",", "R2", "+", "↓", "→", "+", "◯"],
+          ["Activar Stunt Double:", "↓", "←", "+", "◻"],
+          ["←", "+", "◻", ",", "▲", ",", "↓", "+", "✖", ",", "→", "+", "R2", "(X-Ray)"]
+        ],
+        comboError: "Precisión requerida para ejecutar Stunt Double.",
+        fatalities: [
+          { distance: "Cercana", combo: ["→", "←", "◯", "▲"], name: "Little Improv" },
+          { distance: "Lejos", combo: ["←", "←", "→", "◯"], name: "Double Feature" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Cercana", condition: "Terminar el round con Nut Punch cargado", combo: ["↓", "←", "+", "◯", "(mantenido)"] }
+        ],
+        brutalityError: ""
       },
-      brutality: {
-        distance: "Cercana",
-        condition: "Terminar el round con Nut Punch cargado",
-        combo: [icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.circulo.symbol + " (mantenido)"]
+      {
+        id: "scorpion",
+        name: "Scorpion (Hellfire)",
+        style: "🎯",
+        comboDamage: 47,
+        combo: [
+          ["←", "+", "▲", ",", "◻"],
+          ["↓", "→", "+", "▲", "(Teleport)"],
+          ["◻", ",", "◻"],
+          ["↓", "→", "+", "◯", "(Fuego activado)"],
+          ["←", "+", "▲", ",", "◻"]
+        ],
+        comboError: "Usar teleport en el momento correcto.",
+        fatalities: [
+          { distance: "Media", combo: ["→", "←", "↓", "▲"], name: "Just a Scratch" },
+          { distance: "Lejos", combo: ["←", "→", "↓", "◻"], name: "Chain Reaction" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Cercana", condition: "Finalizar con Hellfire sin usar bloqueo en el round", combo: ["↓", "→", "+", "◯"] }
+        ],
+        brutalityError: "No usar bloqueo durante el round."
       },
-      errors: [
-        "No mantengas presionado demasiado el botón durante el combo.",
-        "Timing crítico para activar Stunt Double."
-      ]
-    },
-    {
-      id: "kunglao",
-      name: "Kung Lao (Tempest)",
-      comboDamage: 50,
-      style: "avanzado",
-      description: "Especialista en ataques con sombrero y movimientos impredecibles.",
-      combo: [
-        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
-        [icons.triangulo.symbol, ",", icons.cuadrado.symbol, ",", icons.circulo.symbol, icons.flechaDerecha.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
-      ],
-      fatality: {
-        name: "(Hat Trick)",
-        distance: "Media",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.circulo.symbol]
+      {
+        id: "kitana",
+        name: "Kitana (Royal Storm)",
+        style: "🛡",
+        comboDamage: 52,
+        combo: [
+          ["◻", ",", "◻", ",", "↓", "→", "+", "◻"],
+          ["←", "+", "▲"],
+          ["→", "+", "◯", ",", "←", "+", "◻"],
+          ["▲", ",", "◻", ",", "◯", "→", ",", "↓", "→", "+", "▲"]
+        ],
+        comboError: "",
+        fatalities: [
+          { distance: "Media", combo: ["←", "↓", "←", "◯"], name: "Fan Lift" },
+          { distance: "Cercana", combo: ["→", "→", "←", "▲"], name: "Kiss of Death" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Cercana", condition: "Matar con Fan Lift manteniendo ◻ presionado", combo: ["↓", "→", "+", "◻"] }
+        ],
+        brutalityError: ""
       },
-      brutality: {
-        distance: "Cercana",
-        condition: "Matar con Hat Spin manteniendo ◻ presionado",
-        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol]
+      {
+        id: "subzero",
+        name: "Sub-Zero (Cryomancer)",
+        style: "🛡",
+        comboDamage: 50,
+        combo: [
+          ["←", "+", "▲"],
+          ["→", "+", "◯"],
+          ["↓", "+", "◻", ",", "←", "+", "▲", ",", "→", "+", "◯"],
+          ["↓", "→", "+", "◻"]
+        ],
+        comboError: "",
+        fatalities: [
+          { distance: "Cercana", combo: ["↓", "→", "←", "◻"], name: "Spine Rip" },
+          { distance: "Lejos", combo: ["→", "←", "↓", "◯"], name: "Ice Shatter" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Media", condition: "Finalizar con Ice Ball sin ser golpeado", combo: ["↓", "←", "+", "◻"] }
+        ],
+        brutalityError: ""
       },
-      errors: [
-        "No mantengas presionado Hat Spin demasiado tiempo.",
-        "Ejecuta movimientos rápido para combos largos."
-      ]
-    },
-    {
-      id: "liukang",
-      name: "Liu Kang (Dragon’s Fire)",
-      comboDamage: 55,
-      style: "agresivo",
-      description: "Combina velocidad y poder, ideal para ataques constantes.",
-      combo: [
-        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ", cancelar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ", cancelar otra vez"],
-        [icons.equis.symbol, ",", icons.equis.symbol, ", cancelar y terminar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
-      ],
-      fatality: {
-        name: "(Burn Out)",
-        distance: "Cercana",
-        combo: [icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.cuadrado.symbol]
+      {
+        id: "sonya",
+        name: "Sonya Blade (Special Forces)",
+        style: "🎮",
+        comboDamage: 49,
+        combo: [
+          ["←", "+", "◯"],
+          ["◻", ",", "◻", ",", "▲"],
+          ["↓", "+", "◯", ",", "→", "+", "▲"]
+        ],
+        comboError: "Timing necesario para combos rápidos.",
+        fatalities: [
+          { distance: "Cercana", combo: ["→", "↓", "←", "◯"], name: "Leg Grab" },
+          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Kiss of Death" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Media", condition: "Ejecutar combo sin ser bloqueado", combo: ["↓", "→", "+", "◯"] }
+        ],
+        brutalityError: ""
       },
-      brutality: {
-        distance: "Cercana",
-        condition: "Terminar con Flying Dragon Kick y mantener presionado →",
-        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
+      {
+        id: "raiden",
+        name: "Raiden (Thunder God)",
+        style: "🎯",
+        comboDamage: 53,
+        combo: [
+          ["←", "+", "▲", ",", "◻"],
+          ["↓", "+", "◯"],
+          ["→", "+", "◻"],
+          ["↓", "→", "+", "▲"]
+        ],
+        comboError: "Aprovechar el timing del teletransporte.",
+        fatalities: [
+          { distance: "Media", combo: ["↓", "→", "←", "▲"], name: "Electrocution" },
+          { distance: "Lejos", combo: ["←", "→", "↓", "◯"], name: "Lightning Strike" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Cercana", condition: "Terminar con teleport + ataque fuerte", combo: ["↓", "→", "+", "◯"] }
+        ],
+        brutalityError: ""
       },
-      errors: [
-        "Asegúrate de cancelar a tiempo para continuar el combo.",
-        "No mantener presionado demasiado el botón de ataque."
-      ]
-    },
-    {
-      id: "tanya",
-      name: "Tanya (Kobu Jutsu)",
-      comboDamage: 45,
-      style: "facil",
-      description: "Versátil y rápida, ideal para jugadores nuevos.",
-      combo: [
-        [icons.flechaIzquierda.symbol, "+", icons.circulo.symbol, ",", icons.cuadrado.symbol, ",", "R2", "+", icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.circulo.symbol],
-        ["Corré:", icons.flechaDerecha.symbol, "+", icons.circulo.symbol, ",", icons.cuadrado.symbol, ",", "Drill Kick"]
-      ],
-      fatality: {
-        name: "(Edenian Guillotine)",
-        distance: "Lejos",
-        combo: [icons.flechaDerecha.symbol, icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.triangulo.symbol]
+      {
+        id: "ermac",
+        name: "Ermac (Telekinetic)",
+        style: "🎮",
+        comboDamage: 48,
+        combo: [
+          ["◯", ",", "◻", ",", "▲"],
+          ["↓", "←", "+", "◻"],
+          ["→", "+", "◯"],
+          ["↓", "→", "+", "▲"]
+        ],
+        comboError: "Requiere buena coordinación de telequinesis.",
+        fatalities: [
+          { distance: "Cercana", combo: ["←", "→", "↓", "◯"], name: "Soul Rip" },
+          { distance: "Lejos", combo: ["→", "←", "↓", "▲"], name: "Telekinetic Slam" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Media", condition: "Mantener la presión constante en combos", combo: ["↓", "→", "+", "◻"] }
+        ],
+        brutalityError: ""
       },
-      brutality: {
-        distance: "Media",
-        condition: "Equipar Kobu Jutsu y terminar con Drill Kick",
-        combo: [icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.circulo.symbol]
+      {
+        id: "kunglao",
+        name: "Kung Lao (Hat Trick)",
+        style: "🎯",
+        comboDamage: 51,
+        combo: [
+          ["←", "+", "◻", ",", "▲", ",", "→", "+", "◯"],
+          ["↓", "→", "+", "▲"],
+          ["◯", ",", "◻"]
+        ],
+        comboError: "Timing para lanzar el sombrero.",
+        fatalities: [
+          { distance: "Media", combo: ["→", "←", "↓", "◯"], name: "Hat Toss" },
+          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Spin Death" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Cercana", condition: "Golpear mientras se lanza el sombrero", combo: ["↓", "←", "+", "◯"] }
+        ],
+        brutalityError: ""
       },
-      errors: [
-        "No confundas Drill Kick con otros ataques rápidos.",
-        "Mantén ritmo constante en combos."
-      ]
-    },
-    {
-      id: "scorpion",
-      name: "Scorpion (Hellfire)",
-      comboDamage: 47,
-      style: "defensivo",
-      description: "Especialista en fuego y teletransportes, fuerte en defensa.",
-      combo: [
-        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ",", icons.cuadrado.symbol],
-        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol, "(Teleport)"],
-        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol],
-        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol, "(Fuego activado)"],
-        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ",", icons.cuadrado.symbol]
-      ],
-      fatality: {
-        name: "(Just a Scratch)",
-        distance: "Media",
-        combo: [icons.flechaDerecha.symbol, icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.triangulo.symbol]
+      {
+        id: "cassie",
+        name: "Cassie Cage (Spec Ops)",
+        style: "🎮",
+        comboDamage: 50,
+        combo: [
+          ["→", "+", "◻"],
+          ["←", "+", "▲"],
+          ["↓", "+", "◯"],
+          ["↓", "→", "+", "◻"]
+        ],
+        comboError: "Uso estratégico de ataques especiales.",
+        fatalities: [
+          { distance: "Cercana", combo: ["←", "→", "↓", "◯"], name: "Girl Power" },
+          { distance: "Lejos", combo: ["→", "←", "↓", "▲"], name: "Popstar" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Media", condition: "Ejecutar combos sin ser bloqueado", combo: ["↓", "←", "+", "◻"] }
+        ],
+        brutalityError: ""
       },
-      brutality: {
-        distance: "Cercana",
-        condition: "Finalizar con Hellfire y no usar bloqueo en el round",
-        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
+      {
+        id: "jade",
+        name: "Jade (Assassin)",
+        style: "🛡",
+        comboDamage: 49,
+        combo: [
+          ["←", "+", "▲"],
+          ["→", "+", "◯"],
+          ["↓", "+", "◻", ",", "←", "+", "▲"],
+          ["↓", "→", "+", "◯"]
+        ],
+        comboError: "",
+        fatalities: [
+          { distance: "Cercana", combo: ["→", "↓", "←", "◯"], name: "Fatal Kick" },
+          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Pole Slam" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Cercana", condition: "Mantener presión con ataques rápidos", combo: ["↓", "→", "+", "◯"] }
+        ],
+        brutalityError: ""
       },
-      errors: [
-        "No abuses del teleport para evitar ser predecible.",
-        "Tiempo preciso para activar Hellfire."
-      ]
-    },
-    {
-      id: "subzero",
-      name: "Sub-Zero (Cryomancer)",
-      comboDamage: 45,
-      style: "defensivo",
-      description: "Control del hielo para defensa y ataques estratégicos.",
-      combo: [
-        [icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, "(crear clon)"],
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol],
-        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
-        ["Clon explota, luego:", icons.flechaDerecha.symbol, "+", icons.equis.symbol],
-        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
-      ],
-      fatality: {
-        name: "(Bed of Ice)",
-        distance: "Cercana",
-        combo: [icons.flechaAbajo.symbol, icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.cuadrado.symbol]
+      {
+        id: "erronblack",
+        name: "Erron Black (Gunslinger)",
+        style: "🎯",
+        comboDamage: 46,
+        combo: [
+          ["→", "+", "◻"],
+          ["←", "+", "▲"],
+          ["↓", "+", "◯", ",", "→", "+", "◻"],
+          ["↓", "←", "+", "▲"]
+        ],
+        comboError: "Uso preciso de armas de fuego.",
+        fatalities: [
+          { distance: "Media", combo: ["←", "→", "↓", "◯"], name: "Bullet Proof" },
+          { distance: "Lejos", combo: ["→", "←", "↓", "▲"], name: "Quick Draw" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Cercana", condition: "Ejecutar combos sin fallos", combo: ["↓", "→", "+", "◻"] }
+        ],
+        brutalityError: ""
       },
-      brutality: {
-        distance: "Cercana",
-        condition: "Matar con Slide y mantener pulsado →",
-        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol]
-      },
-      errors: [
-        "No olvides crear el clon antes de atacar.",
-        "Mantener el timing en combos de hielo."
-      ]
-    },
-    {
-      id: "shinnok",
-      name: "Shinnok (Impostor)",
-      comboDamage: 50,
-      style: "avanzado",
-      description: "Controla poderes oscuros, requiere buena estrategia.",
-      combo: [
-        [icons.flechaDerecha.symbol, "+", icons.equis.symbol, ",", icons.cuadrado.symbol, ",", "R2", "+", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol],
-        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, "con poder robado activado"],
-        ["Corré y hacé:", icons.flechaDerecha.symbol, "+", icons.equis.symbol, ",", icons.cuadrado.symbol]
-      ],
-      fatality: {
-        name: "(Judgement Fist)",
-        distance: "Media",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.triangulo.symbol]
-      },
-      brutality: {
-        distance: "Cercana",
-        condition: "Matar con poder robado en el último golpe",
-        combo: ["Botones del ataque robado"]
-      },
-      errors: [
-        "Usa bien el poder robado para combos óptimos.",
-        "No te quedes quieto en la estrategia."
-      ]
-    },
-    {
-      id: "erronblack",
-      name: "Erron Black (Outlaw)",
-      comboDamage: 48,
-      style: "agresivo",
-      description: "Tirador con armas de fuego y trucos letales.",
-      combo: [
-        [icons.flechaDerecha.symbol, "+", icons.triangulo.symbol, ",", icons.cuadrado.symbol],
-        ["Clavá espada:", icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol],
-        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.cuadrado.symbol, "R2 + ↓← + Círculo (EX Granada)"]
-      ],
-      fatality: {
-        name: "(Deadeye)",
-        distance: "Lejos",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.circulo.symbol]
-      },
-      brutality: {
-        distance: "Media",
-        condition: "Finalizar con Sand Grenade EX",
-        combo: [icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.circulo.symbol + " (EX)"]
-      },
-      errors: [
-        "No olvides usar granadas EX para brutalities.",
-        "Mantén la distancia para tiros efectivos."
-      ]
-    },
-    {
-      id: "alien",
-      name: "Alien (Tarkatan)",
-      comboDamage: 60,
-      style: "avanzado",
-      description: "Personaje poderoso y extraño, con ataques exóticos.",
-      combo: [
-        [icons.flechaDerecha.symbol, "+", icons.triangulo.symbol, icons.triangulo.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol],
-        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
-      ],
-      fatality: {
-        name: "(Deadly Sting)",
-        distance: "Media",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.flechaAbajo.symbol, icons.circulo.symbol]
-      },
-      brutality: {
-        distance: "Cercana",
-        condition: "Mantener presionado ↓ durante el último golpe (Back Stabber)",
-        combo: [icons.flechaIzquierda.symbol, icons.cuadrado.symbol, icons.cuadrado.symbol, icons.triangulo.symbol]
-      },
-      errors: [
-        "Cuidado con mantener presionado demasiado el botón final.",
-        "Aprende bien los movimientos exóticos para combos."
-      ]
-    },
-    {
-      id: "jason",
-      name: "Jason Voorhees (Relentless)",
-      comboDamage: 75,
-      style: "defensivo",
-      description: "Lento pero muy fuerte, ideal para castigos.",
-      combo: [
-        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol],
-        ["R2 + ↓→ + Círculo (agarre EX)"],
-        ["Dash"],
-        [icons.cuadrado.symbol, ",", icons.triangulo.symbol],
-        [icons.flechaAbajo.symbol, "+", icons.equis.symbol, "→ R2 (X-Ray)"]
-      ],
-      fatality: {
-        name: "(Greatest Hits)",
-        distance: "Media",
-        combo: [icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.flechaDerecha.symbol, icons.circulo.symbol]
-      },
-      brutality: {
-        distance: "Cercana",
-        condition: "Terminar con motosierra sin ser bloqueado",
-        combo: [icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol, icons.cuadrado.symbol, icons.triangulo.symbol]
-      },
-      errors: [
-        "No dejes que te bloqueen la motosierra.",
-        "Timing lento pero poderoso, cuidado con contraataques."
-      ]
+      {
+        id: "kano",
+        name: "Kano (Black Dragon)",
+        style: "🎯",
+        comboDamage: 44,
+        combo: [
+          ["←", "+", "▲"],
+          ["→", "+", "◯"],
+          ["↓", "+", "◻"],
+          ["↓", "→", "+", "▲"]
+        ],
+        comboError: "Combos agresivos con precisión.",
+        fatalities: [
+          { distance: "Cercana", combo: ["→", "←", "↓", "◯"], name: "Heart Rip" },
+          { distance: "Lejos", combo: ["←", "→", "↓", "▲"], name: "Neck Snap" }
+        ],
+        fatalityError: "",
+        brutalities: [
+          { distance: "Media", condition: "Golpear en combos largos", combo: ["↓", "←", "+", "◯"] }
+        ],
+        brutalityError: ""
+      }
+      // Puedes agregar más personajes aquí con el mismo formato si quieres
+    ];
+
+    // Referencias a DOM
+    const searchInput = document.getElementById("searchInput");
+    const characterSelect = document.getElementById("characterSelect");
+    const comboContainer = document.getElementById("comboContainer");
+    const comboText = document.getElementById("comboText");
+    const comboError = document.getElementById("comboError");
+    const fatalityText = document.getElementById("fatalityText");
+    const fatalityError = document.getElementById("fatalityError");
+    const brutalityText = document.getElementById("brutalityText");
+    const brutalityError = document.getElementById("brutalityError");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const backToTopBtn = document.getElementById("backToTop");
+
+    let currentFilter = "all";
+
+    // Función para mostrar combos, fatalities y brutalities de un personaje
+    function mostrarPersonaje(personaje) {
+      if (!personaje) {
+        comboContainer.style.display = "none";
+        return;
+      }
+      comboContainer.style.display = "block";
+
+      // Combos
+      comboText.innerHTML = personaje.combo.map(line => {
+        if (typeof line === "string") return line;
+        // Si es array, lo transformamos a texto con espacios y resaltamos símbolos
+        return line.map(sym => `<span data-tooltip="${icons[sym]?.name || ''}">${sym}</span>`).join(' ');
+      }).join('\n');
+
+      comboError.textContent = personaje.comboError || "";
+
+      // Fatalities
+      if (personaje.fatalities.length === 0) {
+        fatalityText.textContent = "No hay fatalities registrados.";
+      } else {
+        fatalityText.innerHTML = personaje.fatalities.map(f => {
+          let comboStr = f.combo.map(sym => `<span data-tooltip="${icons[sym]?.name || ''}">${sym}</span>`).join(' ');
+          return `Distancia: <strong>${f.distance}</strong>\n${comboStr}\nNombre: <em>${f.name}</em>`;
+        }).join('\n\n');
+      }
+      fatalityError.textContent = personaje.fatalityError || "";
+
+      // Brutalities
+      if (personaje.brutalities.length === 0) {
+        brutalityText.textContent = "No hay brutalities registrados.";
+      } else {
+        brutalityText.innerHTML = personaje.brutalities.map(b => {
+          let comboStr = b.combo.map(sym => `<span data-tooltip="${icons[sym]?.name || ''}">${sym}</span>`).join(' ');
+          return `Distancia: <strong>${b.distance}</strong>\nCondición: <em>${b.condition}</em>\nCombo: ${comboStr}`;
+        }).join('\n\n');
+      }
+      brutalityError.textContent = personaje.brutalityError || "";
     }
-  ];
 
-  // FUNCIONES
+    // Llenar el select con personajes filtrados
+    function actualizarSelect() {
+      const filtro = currentFilter;
+      const busqueda = searchInput.value.trim().toLowerCase();
 
-  // Crear elementos con tooltip para íconos
-  function iconWithTooltip(icon) {
-    return `<span class="tooltip" tabindex="0" aria-label="${icon.desc}">${icon.symbol}<span class="tooltiptext">${icon.desc}</span></span>`;
-  }
+      // Filtrar personajes por estilo y búsqueda
+      const filtrados = characters
+        .filter(p => filtro === "all" || p.style === filtro)
+        .filter(p => p.name.toLowerCase().includes(busqueda));
 
-  // Formatear combos y movimientos para mostrar en HTML con tooltips
-  function formatMoveArray(arr) {
-    return arr.map(item => {
-      if(typeof item === "string") {
-        // Buscar íconos y reemplazar por spans con tooltip
-        for(const key in icons) {
-          if(item.includes(icons[key].symbol)) {
-            item = item.split(icons[key].symbol).map((part, i, a) => {
-              if(i === a.length - 1) return part;
-              return part + iconWithTooltip(icons[key]);
-            }).join('');
-          }
+      // Ordenar por daño descendente
+      filtrados.sort((a,b) => b.comboDamage - a.comboDamage);
+
+      // Limpiar select
+      characterSelect.innerHTML = '<option value="">Seleccioná un personaje</option>';
+
+      filtrados.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.id;
+        option.textContent = `${p.name} (${p.comboDamage}%)`;
+        characterSelect.appendChild(option);
+      });
+
+      // Limpiar display si el personaje actual no está en filtrados
+      if (!filtrados.some(p => p.id === characterSelect.value)) {
+        comboContainer.style.display = "none";
+      }
+    }
+
+    // Escuchar filtro
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.getAttribute("data-style");
+        searchInput.value = "";
+        actualizarSelect();
+      });
+      btn.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          btn.click();
         }
-        return item;
-      }
-      return item;
-    }).join(' ');
-  }
-
-  // Inicializar select y filtros
-  const characterSelect = document.getElementById('characterSelect');
-  const searchInput = document.getElementById('searchInput');
-  const comboContainer = document.getElementById('comboContainer');
-  const comboText = document.getElementById('comboText');
-  const fatalityText = document.getElementById('fatalityText');
-  const brutalityText = document.getElementById('brutalityText');
-  const filterTags = document.querySelectorAll('.filter-tag');
-  const scrollTopBtn = document.getElementById('scrollTopBtn');
-  const fullscreenBtn = document.getElementById('fullscreenBtn');
-
-  let currentStyleFilter = 'all';
-
-  function populateSelect() {
-    characterSelect.innerHTML = '<option value="">Seleccioná un personaje</option>';
-    let filtered = characters.filter(ch => currentStyleFilter === 'all' || ch.style === currentStyleFilter);
-    filtered.forEach(ch => {
-      const option = document.createElement('option');
-      option.value = ch.id;
-      option.textContent = `${ch.name} (${ch.comboDamage}%)`;
-      characterSelect.appendChild(option);
+      });
     });
-  }
 
-  function filterCharactersBySearch() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    let filtered = characters.filter(ch => (currentStyleFilter === 'all' || ch.style === currentStyleFilter) && ch.name.toLowerCase().includes(searchTerm));
-    characterSelect.innerHTML = '<option value="">Seleccioná un personaje</option>';
-    filtered.forEach(ch => {
-      const option = document.createElement('option');
-      option.value = ch.id;
-      option.textContent = `${ch.name} (${ch.comboDamage}%)`;
-      characterSelect.appendChild(option);
+    // Escuchar búsqueda
+    searchInput.addEventListener("input", () => {
+      actualizarSelect();
     });
-  }
 
-  // Mostrar info personaje seleccionado
-  function showCharacterInfo(id) {
-    if(!id) {
-      comboContainer.style.display = 'none';
-      comboContainer.classList.remove('visible');
-      return;
-    }
-    const ch = characters.find(c => c.id === id);
-    if(!ch) return;
-
-    // Formatear combos
-    let comboHTML = ch.combo.map(cmb => formatMoveArray(cmb)).join('\n\n');
-    let fatalityHTML = `<b>Distancia:</b> ${ch.fatality.distance}<br/><b>Comando:</b> ${formatMoveArray(ch.fatality.combo)}<br/><b>Nombre:</b> ${ch.fatality.name}`;
-    let brutalityHTML = `<b>Distancia:</b> ${ch.brutality.distance}<br/><b>Condición:</b> ${ch.brutality.condition}<br/><b>Comando:</b> ${formatMoveArray(ch.brutality.combo)}`;
-
-    comboText.innerHTML = comboHTML;
-    fatalityText.innerHTML = fatalityHTML;
-    brutalityText.innerHTML = brutalityHTML;
-
-    comboContainer.style.display = 'block';
-    setTimeout(() => comboContainer.classList.add('visible'), 10);
-
-    // Scroll a resultados
-    comboContainer.scrollIntoView({behavior: 'smooth'});
-  }
-
-  // Eventos
-  characterSelect.addEventListener('change', () => {
-    showCharacterInfo(characterSelect.value);
-  });
-
-  searchInput.addEventListener('input', () => {
-    filterCharactersBySearch();
-  });
-
-  filterTags.forEach(tag => {
-    tag.addEventListener('click', () => {
-      filterTags.forEach(t => t.classList.remove('selected'));
-      tag.classList.add('selected');
-      currentStyleFilter = tag.getAttribute('data-style');
-      filterCharactersBySearch();
-      comboContainer.style.display = 'none';
-      comboContainer.classList.remove('visible');
+    // Escuchar selección
+    characterSelect.addEventListener("change", () => {
+      const selectedId = characterSelect.value;
+      const personaje = characters.find(p => p.id === selectedId);
+      mostrarPersonaje(personaje);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
-    tag.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        tag.click();
-      }
+
+    // Back to top button
+    window.addEventListener("scroll", () => {
+      backToTopBtn.style.display = window.scrollY > 300 ? "flex" : "none";
     });
-  });
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
-  // Scroll to top button
-  window.addEventListener('scroll', () => {
-    if(window.scrollY > 300) {
-      scrollTopBtn.classList.add('show');
-    } else {
-      scrollTopBtn.classList.remove('show');
-    }
-  });
-  scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  });
-
-  // Fullscreen toggle
-  fullscreenBtn.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => alert(`Error al activar pantalla completa: ${err.message}`));
-    } else {
-      document.exitFullscreen();
-    }
-  });
-
-  // Iniciar
-  populateSelect();
-</script>
+    // Inicializar
+    actualizarSelect();
+  </script>
 </body>
 </html>
