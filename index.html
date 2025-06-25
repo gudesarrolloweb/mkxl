@@ -3,31 +3,61 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Combos, Fatalities y Brutalities – MKXL</title>
+<title>MKXL – Combos, Fatalities y Brutalities</title>
 <style>
+  :root {
+    --color-bg: #0d0d0d;
+    --color-text: #eee;
+    --color-combo: #42a5f5;
+    --color-fatality: #ef5350;
+    --color-brutality: #fbc02d;
+    --color-highlight: #e50914;
+  }
   body {
-    background-color: #0d0d0d;
-    color: #eee;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0; padding: 20px;
+    transition: background-color 0.5s, color 0.5s;
   }
   h1 {
     text-align: center;
-    color: #e50914;
+    color: var(--color-highlight);
     margin-bottom: 1rem;
   }
-  select {
+  input[type="text"], select {
     display: block;
     margin: 0 auto 1rem;
     padding: 10px;
-    font-size: 1.3rem;
-    background: #222;
-    color: #eee;
-    border: 1px solid #e50914;
+    font-size: 1.1rem;
     border-radius: 5px;
     max-width: 320px;
+    border: 1px solid var(--color-highlight);
+    background: #222;
+    color: var(--color-text);
+  }
+  select option {
+    background: #222;
+    color: var(--color-text);
+  }
+  .filter-buttons {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .filter-buttons button {
+    background: #222;
+    border: 1px solid var(--color-highlight);
+    color: var(--color-text);
+    padding: 5px 12px;
+    margin: 0 5px 8px 5px;
+    border-radius: 5px;
     cursor: pointer;
-    -webkit-appearance: menulist-button;
+    transition: background-color 0.3s;
+  }
+  .filter-buttons button.active,
+  .filter-buttons button:hover {
+    background-color: var(--color-highlight);
+    color: #111;
   }
   .container {
     max-width: 720px;
@@ -35,143 +65,523 @@
     background: #1a1a1a;
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 0 10px #e50914;
+    box-shadow: 0 0 10px var(--color-highlight);
   }
-  .combo-text, .fatality-text, .brutality-text {
+  .section-title {
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.2rem;
+  }
+  .combo-text {
+    color: var(--color-combo);
     white-space: pre-wrap;
     font-size: 16px;
     line-height: 1.5;
     margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
   }
-  .section-title {
-    font-weight: 700;
-    color: #f39c12;
-    margin-top: 1rem;
-    margin-bottom: 0.3rem;
+  .fatality-text {
+    color: var(--color-fatality);
+    white-space: pre-wrap;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+  }
+  .brutality-text {
+    color: var(--color-brutality);
+    white-space: pre-wrap;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+  }
+  .separator {
+    height: 1px;
+    background: #444;
+    margin: 10px 0;
+  }
+  /* Tooltip container */
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+  }
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: max-content;
+    max-width: 180px;
+    background-color: var(--color-highlight);
+    color: #111;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 14px;
+    user-select: none;
+  }
+  .tooltip:hover .tooltiptext,
+  .tooltip:focus .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  /* Fade in animation */
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  /* Volver arriba */
+  #backToTopBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--color-highlight);
+    color: #111;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: none;
+    z-index: 100;
+    box-shadow: 0 0 8px var(--color-highlight);
+    transition: background-color 0.3s;
+  }
+  #backToTopBtn:hover {
+    background-color: #ff2c2c;
+    color: #fff;
+  }
+  /* Responsive */
+  @media (max-width: 768px) {
+    body { padding: 10px; }
+    h1 { font-size: 20px; }
+    #backToTopBtn { bottom: 20px; right: 20px; }
   }
 </style>
 </head>
 <body>
-<h1>Combos, Fatalities y Brutalities – Mortal Kombat XL</h1>
+
+<h1>MKXL – Combos, Fatalities y Brutalities</h1>
+
+<input type="text" id="searchInput" placeholder="Buscar personaje..." aria-label="Buscar personaje" />
+
+<div class="filter-buttons" role="group" aria-label="Filtrar personajes por estilo">
+  <button data-style="all" class="active" aria-pressed="true">Todos</button>
+  <button data-style="agresivo" aria-pressed="false">🎯 Agresivo</button>
+  <button data-style="defensivo" aria-pressed="false">🛡 Defensivo</button>
+  <button data-style="facil" aria-pressed="false">👶 Fácil</button>
+  <button data-style="avanzado" aria-pressed="false">🎮 Avanzado</button>
+</div>
 
 <select id="characterSelect" aria-label="Seleccionar personaje">
   <option value="">Seleccioná un personaje</option>
 </select>
 
-<div class="container" id="comboContainer" style="display:none;">
-  <div>
-    <div class="section-title">Combo</div>
-    <div id="comboText" class="combo-text"></div>
-  </div>
-  <div>
-    <div class="section-title">🎯 Fatality (distancia)</div>
-    <div id="fatalityText" class="fatality-text" style="color:#e74c3c;"></div>
-  </div>
-  <div>
-    <div class="section-title">💥 Brutality (condiciones y botones)</div>
-    <div id="brutalityText" class="brutality-text" style="color:#f1c40f;"></div>
-  </div>
+<div class="container" id="comboContainer" style="display:none;" aria-live="polite" aria-atomic="true">
+  <div class="section-title">💥 Combos</div>
+  <div id="comboText" class="combo-text" tabindex="0"></div>
+  <div class="separator"></div>
+  <div class="section-title">🎯 Fatalities</div>
+  <div id="fatalityText" class="fatality-text" tabindex="0"></div>
+  <div class="separator"></div>
+  <div class="section-title">☠️ Brutalities</div>
+  <div id="brutalityText" class="brutality-text" tabindex="0"></div>
+  <div class="separator"></div>
+  <div id="errorText" style="color:#f44336; font-weight:bold;"></div>
 </div>
 
+<button id="backToTopBtn" title="Volver arriba" aria-label="Volver arriba">↑</button>
+
 <script>
-// Definimos el array characters antes de usarlo
-const characters = [
-  {
-    id: "alien",
-    name: "Alien (Tarkatan)",
-    comboDamage: "60%",
-    combo: [
-      ['→', '+', '▲', '▲', ',', '■', ',', '↓→', '+', '●'],
-      ['↑', '+', '■'],
-      ['←', '+', '■', ',', '■', ',', '↓→', '+', '●']
-    ],
-    fatality: {
-      distance: "Media",
-      combo: ['←', '→', '↓', '●', '(Deadly Sting)']
+  // Íconos con tooltip
+  const icons = {
+    cuadrado: { symbol: '◻', desc: 'Cuadrado' },
+    triangulo: { symbol: '▲', desc: 'Triángulo' },
+    circulo: { symbol: '◯', desc: 'Círculo' },
+    equis: { symbol: '✖', desc: 'Equis' },
+    r2: { symbol: 'R2', desc: 'Botón R2' },
+    l2: { symbol: 'L2', desc: 'Botón L2' },
+    flechaArriba: { symbol: '↑', desc: 'Flecha Arriba' },
+    flechaAbajo: { symbol: '↓', desc: 'Flecha Abajo' },
+    flechaIzquierda: { symbol: '←', desc: 'Flecha Izquierda' },
+    flechaDerecha: { symbol: '→', desc: 'Flecha Derecha' }
+  };
+
+  // Personajes con sus datos completos, mejor variante, daño y estilo
+  // Ordenados por daño descendente
+  const characters = [
+    {
+      id: "jason",
+      name: "Jason Voorhees (Relentless)",
+      comboDamage: 75,
+      style: "agresivo",
+      description: "Personaje fuerte con golpes pesados y agarres poderosos.",
+      combo: [
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol],
+        ["R2 + ↓→ + ◯ (agarre EX)"],
+        ["Dash"],
+        [icons.cuadrado.symbol, ",", icons.triangulo.symbol],
+        [icons.flechaAbajo.symbol, "+", icons.equis.symbol, "→ R2 (X-Ray)"]
+      ],
+      fatality: {
+        distance: "Media",
+        combo: [icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.flechaDerecha.symbol, icons.circulo.symbol],
+        name: "(Greatest Hits)",
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Terminar con motosierra sin ser bloqueado",
+        combo: [icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol, icons.cuadrado.symbol, icons.triangulo.symbol]
+      },
+      commonErrors: [
+        "No mantengas presionado un botón al realizar el combo.",
+        "Ejecuta los golpes con buen timing para que todos conecten."
+      ]
     },
-    brutality: {
-      distance: "Cercana",
-      condition: "Mantener ↓ durante el último golpe (Back Stabber)",
-      combo: ['←', '■', ',', '■', ',', '▲']
-    }
-  },
-  {
-    id: "tanya",
-    name: "Tanya (Kobu Jutsu)",
-    comboDamage: "45%",
-    combo: [
-      ['←', '+', '●', ',', '■', ',', 'R2', '+', '↓←', '+', '●'],
-      ['Corre:', '→', '+', '●', ',', '■', ',', 'Drill Kick']
-    ],
-    fatality: {
-      distance: "Lejos",
-      combo: ['→', '←', '→', '▲', '(Edenian Guillotine)']
+    {
+      id: "johnny",
+      name: "Johnny Cage (Stunt Double)",
+      comboDamage: 70,
+      style: "agresivo",
+      description: "Personaje ágil con ataques variados y buen rango.",
+      combo: [
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol, ",", "R2", "+", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol],
+        ["Activar Stunt Double:", icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol, ",", icons.flechaAbajo.symbol, "+", icons.equis.symbol, ",", icons.flechaDerecha.symbol, "+", "R2", "(X-Ray)"]
+      ],
+      fatality: {
+        distance: "Cercana",
+        combo: [icons.flechaDerecha.symbol, icons.flechaIzquierda.symbol, icons.circulo.symbol, icons.triangulo.symbol],
+        name: "(Little Improv)",
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Terminar el round con Nut Punch cargado",
+        combo: [icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.circulo.symbol, "(mantenido)"]
+      },
+      commonErrors: [
+        "No mantengas presionado un botón al realizar el combo.",
+        "Practica la activación del Stunt Double para maximizar daño."
+      ]
     },
-    brutality: {
-      distance: "Media",
-      condition: "Equipar Kobu Jutsu y terminar con Drill Kick",
-      combo: ['↓←', '+', '●']
-    }
-  },
-  {
-    id: "liukang",
-    name: "Liu Kang (Dragon’s Fire)",
-    comboDamage: "55%",
-    combo: [
-      ['■', ',', '■', ', cancelar con', '↓→', '+', '■'],
-      ['←', '+', '▲', ', cancelar otra vez'],
-      ['✖', ',', '✖', ', cancelar y terminar con', '↓→', '+', '●']
-    ],
-    fatality: {
-      distance: "Cercana",
-      combo: ['↓', '←', '→', '■', '(Burn Out)']
+    {
+      id: "kunglao",
+      name: "Kung Lao (Tempest)",
+      comboDamage: 50,
+      style: "avanzado",
+      description: "Rápido y técnico, con combos basados en movimientos especiales.",
+      combo: [
+        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
+        [icons.triangulo.symbol, ",", icons.cuadrado.symbol, ",", icons.circulo.symbol, icons.flechaDerecha.symbol, ",", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
+      ],
+      fatality: {
+        distance: "Media",
+        combo: [icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.circulo.symbol],
+        name: "(Hat Trick)",
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Matar con Hat Spin manteniendo ◻ presionado",
+        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol]
+      },
+      commonErrors: [
+        "Practica el timing del Hat Spin para conectar la brutality.",
+        "No sueltes el botón de cuadrado durante el Hat Spin."
+      ]
     },
-    brutality: {
-      distance: "Cercana",
-      condition: "Terminar con Flying Dragon Kick y mantener →",
-      combo: ['↓→', '+', '▲']
+    {
+      id: "scorpion",
+      name: "Scorpion (Hellfire)",
+      comboDamage: 47,
+      style: "agresivo",
+      description: "Especialista en teleportación y ataques rápidos.",
+      combo: [
+        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ",", icons.cuadrado.symbol],
+        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol, "(Teleport)"],
+        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol],
+        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol, "(Fuego activado)"],
+        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ",", icons.cuadrado.symbol]
+      ],
+      fatality: {
+        distance: "Media",
+        combo: [icons.flechaDerecha.symbol, icons.flechaIzquierda.symbol, icons.flechaAbajo.symbol, icons.triangulo.symbol],
+        name: "(Just a Scratch)",
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Finalizar con Hellfire y no usar bloqueo en el round",
+        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
+      },
+      commonErrors: [
+        "No uses bloqueo mientras preparas el Hellfire para la brutality.",
+        "Asegúrate de ejecutar rápido el combo para no perder la oportunidad."
+      ]
+    },
+    {
+      id: "subzero",
+      name: "Sub-Zero (Cryomancer)",
+      comboDamage: 45,
+      style: "defensivo",
+      description: "Controla el campo con congelaciones y clones.",
+      combo: [
+        [icons.flechaAbajo.symbol + icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, "(crear clon)"],
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol],
+        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
+        ["Clon explota, luego:", icons.flechaDerecha.symbol, "+", icons.equis.symbol],
+        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
+      ],
+      fatality: {
+        distance: "Cercana",
+        combo: [icons.flechaAbajo.symbol, icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.cuadrado.symbol],
+        name: "(Bed of Ice)",
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Matar con Slide y mantener pulsado →",
+        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol]
+      },
+      commonErrors: [
+        "No mantengas presionado un botón en exceso durante el slide.",
+        "Asegúrate de activar el clon antes de terminar el combo."
+      ]
+    },
+    {
+      id: "liukang",
+      name: "Liu Kang (Dragon’s Fire)",
+      comboDamage: 55,
+      style: "avanzado",
+      description: "Combos con cancelaciones y golpes fuertes.",
+      combo: [
+        [icons.cuadrado.symbol, ",", icons.cuadrado.symbol, ", cancelar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaIzquierda.symbol, "+", icons.triangulo.symbol, ", cancelar otra vez"],
+        [icons.equis.symbol, ",", icons.equis.symbol, ", cancelar y terminar con", icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.circulo.symbol]
+      ],
+      fatality: {
+        distance: "Cercana",
+        combo: [icons.flechaAbajo.symbol, icons.flechaIzquierda.symbol, icons.flechaDerecha.symbol, icons.cuadrado.symbol],
+        name: "(Burn Out)",
+      },
+      brutality: {
+        distance: "Media",
+        condition: "Finalizar con Flying Dragon Kick EX",
+        combo: [icons.flechaDerecha.symbol, "+", icons.triangulo.symbol]
+      },
+      commonErrors: [
+        "No te apresures en las cancelaciones para que se ejecuten bien.",
+        "Practica el timing para el Flying Dragon Kick."
+      ]
+    },
+    {
+      id: "mileena",
+      name: "Mileena (Killer Instinct)",
+      comboDamage: 60,
+      style: "agresivo",
+      description: "Ataques rápidos y engañosos con movimientos especiales.",
+      combo: [
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.flechaAbajo.symbol, "+", icons.circulo.symbol],
+        [icons.triangulo.symbol, ",", icons.circulo.symbol, ",", icons.flechaArriba.symbol, "+", icons.equis.symbol],
+        [icons.flechaDerecha.symbol, "+", icons.triangulo.symbol, ",", icons.flechaAbajo.symbol, "+", icons.equis.symbol]
+      ],
+      fatality: {
+        distance: "Media",
+        combo: [icons.flechaDerecha.symbol, icons.flechaDerecha.symbol, icons.flechaIzquierda.symbol, icons.circulo.symbol],
+        name: "(Ball and Chain)",
+      },
+      brutality: {
+        distance: "Cercana",
+        condition: "Terminar con múltiples golpes rápidos",
+        combo: [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol, ",", icons.cuadrado.symbol]
+      },
+      commonErrors: [
+        "Mantén el ritmo de golpes para que el combo no se interrumpa.",
+        "Practica los movimientos especiales para mayor fluidez."
+      ]
+    },
+    {
+      id: "sonya",
+      name: "Sonya Blade (Diamond)",
+      comboDamage: 52,
+      style: "defensivo",
+      description: "Buena defensa con combos de agarre y golpes rápidos.",
+      combo: [
+        [icons.flechaIzquierda.symbol, "+", icons.cuadrado.symbol, ",", icons.triangulo.symbol],
+        [icons.flechaAbajo.symbol + icons.flechaDerecha.symbol, "+", icons.cuadrado.symbol],
+        [icons.flechaAbajo.symbol, "+", icons.equis.symbol, ",", icons.flechaDerecha.symbol, "+", "R2", "(X-Ray)"]
+      ],
+      fatality: {
+        distance: "Cercana",
+        combo: [icons.flechaDerecha.symbol, icons.flechaIzquierda.symbol, icons.cuadrado.symbol, icons.triangulo.symbol],
+        name: "(Touchdown)",
+      },
+      brutality: {
+        distance: "Media",
+        condition: "Terminar con ataque en aire",
+        combo: [icons.flechaArriba.symbol, "+", icons.cuadrado.symbol]
+      },
+      commonErrors: [
+        "No pierdas el timing para los agarres.",
+        "Practica la defensa y contraataques."
+      ]
     }
+    // Agrega aquí más personajes si quieres
+  ];
+
+  // Ordenar personajes por daño descendente (ya ordenados, pero por seguridad)
+  characters.sort((a,b) => b.comboDamage - a.comboDamage);
+
+  // Referencias DOM
+  const select = document.getElementById("characterSelect");
+  const comboContainer = document.getElementById("comboContainer");
+  const comboText = document.getElementById("comboText");
+  const fatalityText = document.getElementById("fatalityText");
+  const brutalityText = document.getElementById("brutalityText");
+  const errorText = document.getElementById("errorText");
+  const searchInput = document.getElementById("searchInput");
+  const filterButtons = document.querySelectorAll(".filter-buttons button");
+  const backToTopBtn = document.getElementById("backToTopBtn");
+
+  // Función para mostrar combos con tooltips
+  function renderComboLines(lines) {
+    return lines.map(line => {
+      if (Array.isArray(line)) {
+        return line.map(item => {
+          for (const key in icons) {
+            if (icons[key].symbol === item) {
+              return `<span class="tooltip" tabindex="0">${item}<span class="tooltiptext">${icons[key].desc}</span></span>`;
+            }
+          }
+          return item;
+        }).join(" ");
+      }
+      return line;
+    }).join("\n");
   }
-  // Agrega aquí el resto de personajes siguiendo el mismo formato
-];
 
-// Referencias DOM
-const select = document.getElementById('characterSelect');
-const comboContainer = document.getElementById('comboContainer');
-const comboText = document.getElementById('comboText');
-const fatalityText = document.getElementById('fatalityText');
-const brutalityText = document.getElementById('brutalityText');
+  // Render fatality con tooltips
+  function renderFatality(f) {
+    if (!f) return "No disponible";
+    return `Distancia: ${f.distance}\nComando: ${f.combo.map(i => {
+      for (const key in icons) {
+        if (icons[key].symbol === i) return `<span class="tooltip" tabindex="0">${i}<span class="tooltiptext">${icons[key].desc}</span></span>`;
+      }
+      return i;
+    }).join(" ")}`;
+  }
 
-// Función para renderizar líneas de combos/fatalities/brutalities
-function renderComboLines(lines) {
-  return lines.map(line => line.join(' ')).join('\n');
-}
+  // Render brutality con tooltips
+  function renderBrutality(b) {
+    if (!b) return "No disponible";
+    return `Distancia: ${b.distance}\nCondición: ${b.condition}\nComando: ${b.combo.map(i => {
+      for (const key in icons) {
+        if (icons[key].symbol === i) return `<span class="tooltip" tabindex="0">${i}<span class="tooltiptext">${icons[key].desc}</span></span>`;
+      }
+      return i;
+    }).join(" ")}`;
+  }
 
-// Poblamos el select al cargar DOM
-document.addEventListener('DOMContentLoaded', () => {
-  characters.forEach(character => {
-    const option = document.createElement('option');
-    option.value = character.id;
-    option.textContent = `${character.name} (${character.comboDamage})`;
-    select.appendChild(option);
+  // Render errores comunes
+  function renderErrors(errors) {
+    if (!errors || errors.length === 0) return "";
+    return "⚠️ Errores comunes:\n" + errors.map(e => "• " + e).join("\n");
+  }
+
+  // Poblar select con personajes filtrados
+  function populateSelect(filteredChars) {
+    select.innerHTML = '<option value="">Seleccioná un personaje</option>';
+    filteredChars.forEach(character => {
+      const option = document.createElement("option");
+      option.value = character.id;
+      option.textContent = `${character.name} – ${character.comboDamage}%`;
+      option.dataset.style = character.style;
+      select.appendChild(option);
+    });
+  }
+
+  // Mostrar info del personaje seleccionado
+  function showCharacter(id) {
+    if (!id) {
+      comboContainer.style.display = "none";
+      errorText.textContent = "";
+      localStorage.removeItem("lastCharacter");
+      return;
+    }
+    localStorage.setItem("lastCharacter", id);
+    const character = characters.find(c => c.id === id);
+    if (!character) return;
+    comboContainer.style.display = "block";
+
+    comboText.innerHTML = renderComboLines(character.combo);
+    fatalityText.innerHTML = renderFatality(character.fatality);
+    brutalityText.innerHTML = renderBrutality(character.brutality);
+    errorText.textContent = renderErrors(character.commonErrors);
+  }
+
+  // Eventos filtro por estilo
+  let currentStyle = "all";
+  filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-pressed", "false");
+      });
+      btn.classList.add("active");
+      btn.setAttribute("aria-pressed", "true");
+      currentStyle = btn.dataset.style;
+
+      const filteredChars = currentStyle === "all"
+        ? characters
+        : characters.filter(c => c.style === currentStyle);
+      populateSelect(filteredChars);
+      showCharacter(""); // Ocultar detalles
+      searchInput.value = "";
+    });
   });
-});
 
-// Evento cambio de selección
-select.addEventListener('change', () => {
-  const selectedId = select.value;
-  if (!selectedId) {
-    comboContainer.style.display = 'none';
-    return;
+  // Búsqueda en select con filtro activo
+  searchInput.addEventListener("input", () => {
+    const term = searchInput.value.toLowerCase();
+    const filteredChars = (currentStyle === "all" ? characters : characters.filter(c => c.style === currentStyle))
+      .filter(c => c.name.toLowerCase().includes(term));
+    populateSelect(filteredChars);
+    showCharacter(""); // Ocultar detalles
+  });
+
+  // Botón volver arriba
+  window.onscroll = () => {
+    if (document.documentElement.scrollTop > 300) {
+      backToTopBtn.style.display = "block";
+    } else {
+      backToTopBtn.style.display = "none";
+    }
+  };
+  backToTopBtn.onclick = () => {
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
+
+  // Inicializar lista y seleccionar último personaje guardado
+  populateSelect(characters);
+  const lastCharacter = localStorage.getItem("lastCharacter");
+  if (lastCharacter) {
+    select.value = lastCharacter;
+    showCharacter(lastCharacter);
   }
-  const character = characters.find(c => c.id === selectedId);
-  if (!character) return;
-  comboContainer.style.display = 'block';
-  comboText.textContent = renderComboLines(character.combo);
-  fatalityText.textContent = `Distancia: ${character.fatality.distance}\n` + renderComboLines([character.fatality.combo]);
-  brutalityText.textContent = `Distancia: ${character.brutality.distance}\nCondición: ${character.brutality.condition}\n` + renderComboLines([character.brutality.combo]);
-});
 </script>
 
 </body>
 </html>
+
