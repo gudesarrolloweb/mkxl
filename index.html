@@ -722,6 +722,27 @@
     condition: "Terminar con beso y mantener →",
     combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
   }
+},
+      {
+  id: "goro",
+  name: "Goro (Shokan)",
+  comboDamage: 65,
+  combo: [
+    [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.cuadrado],
+    [icons.flechaArriba, "+", icons.triangulo],
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.equis],
+    [icons.flechaDerecha, "+", icons.circulo, ",", icons.flechaAbajo, "+", icons.cuadrado]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaIzquierda, icons.flechaDerecha, icons.cuadrado, icons.triangulo],
+    name: "(Shokan Sprawl)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con stomp cargado",
+    combo: [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.cuadrado, "(mantenido)"]
+  }
 }
       // Agrega aquí el resto de personajes que desees, siguiendo el formato
     ];
