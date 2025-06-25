@@ -323,6 +323,186 @@
           combo: [icons.flechaDerecha, "+", icons.cuadrado, icons.cuadrado, icons.triangulo]
         }
       }
+      {
+  id: "cassie",
+  name: "Cassie Cage (Spec Ops)",
+  comboDamage: 60,
+  combo: [
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaIzquierda, "+", icons.triangulo, ",", icons.cuadrado],
+    [icons.equis, "+", icons.equis, ",", icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo]
+  ],
+  fatality: {
+    distance: "Media",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.circulo, icons.triangulo],
+    name: "(Pop Lock and Drop)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con Quick Draw y mantener →",
+    combo: [icons.flechaAbajo + icons.flechaDerecha, "+", icons.triangulo]
+  }
+},
+{
+  id: "raiden",
+  name: "Raiden (Lord of Thunder)",
+  comboDamage: 55,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaArriba, "+", icons.triangulo],
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.equis]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaAbajo, icons.flechaArriba, icons.flechaIzquierda, icons.triangulo],
+    name: "(Electrify)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Finalizar con Lightning Bolt cargado",
+    combo: [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo]
+  }
+},
+{
+  id: "jacqui",
+  name: "Jacqui Briggs (Wrecking Ball)",
+  comboDamage: 53,
+  combo: [
+    [icons.cuadrado, ",", icons.equis, ",", icons.cuadrado],
+    [icons.flechaDerecha, "+", icons.triangulo, ",", icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo],
+    [icons.flechaIzquierda, "+", icons.cuadrado]
+  ],
+  fatality: {
+    distance: "Media",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.circulo, icons.triangulo],
+    name: "(Gear Shift)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Finalizar con Rocket Kick y mantener ↓",
+    combo: [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.cuadrado]
+  }
+},
+{
+  id: "kano",
+  name: "Kano (Cybernetic)",
+  comboDamage: 52,
+  combo: [
+    [icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado, ",", icons.equis, ",", icons.triangulo],
+    [icons.flechaIzquierda, "+", icons.triangulo],
+    [icons.cuadrado, ",", icons.cuadrado]
+  ],
+  fatality: {
+    distance: "Lejos",
+    combo: [icons.flechaIzquierda, icons.flechaAbajo, icons.flechaDerecha, icons.circulo],
+    name: "(Eye Laser)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Terminar con Eye Laser y mantener →",
+    combo: [icons.flechaAbajo + icons.flechaDerecha, "+", icons.circulo]
+  }
+},
+{
+  id: "jade",
+  name: "Jade (Deadly Assassin)",
+  comboDamage: 48,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.triangulo, ",", icons.cuadrado],
+    [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.triangulo]
+  ],
+  fatality: {
+    distance: "Media",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.circulo, icons.triangulo],
+    name: "(Fatal Blow)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Finalizar con Razor-Rang y mantener ←",
+    combo: [icons.flechaIzquierda + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "kabal",
+  name: "Kabal (Slasher)",
+  comboDamage: 51,
+  combo: [
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.triangulo],
+    [icons.flechaArriba, "+", icons.equis]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaAbajo, icons.flechaAbajo, icons.flechaIzquierda, icons.cuadrado],
+    name: "(Face Rip)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Finalizar con Hook Slam y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "mileena",
+  name: "Mileena (Tarkatan)",
+  comboDamage: 49,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.circulo, ",", icons.cuadrado],
+    [icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaArriba, "+", icons.triangulo]
+  ],
+  fatality: {
+    distance: "Lejos",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.flechaAbajo, icons.triangulo],
+    name: "(Deadly Kiss)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con sai y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.circulo]
+  }
+},
+{
+  id: "nightwolf",
+  name: "Nightwolf (Shaman)",
+  comboDamage: 46,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.cuadrado],
+    [icons.flechaAbajo + icons.flechaDerecha, "+", icons.triangulo],
+    [icons.flechaArriba, "+", icons.equis]
+  ],
+  fatality: {
+    distance: "Media",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.circulo, icons.triangulo],
+    name: "(Spirit Bow)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Finalizar con tomahawk y mantener ←",
+    combo: [icons.flechaIzquierda + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "raiden",
+  name: "Raiden (Lord of Thunder)",
+  comboDamage: 55,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaArriba, "+", icons.triangulo],
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.equis]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaAbajo, icons.flechaArriba, icons.flechaIzquierda, icons.triangulo],
+    name: "(Electrify)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Finalizar con Lightning Bolt cargado",
+    combo: [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo]
+  }
+}
       // Agrega aquí el resto de personajes que desees, siguiendo el formato
     ];
 
