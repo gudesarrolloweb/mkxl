@@ -483,6 +483,246 @@
     combo: [icons.flechaIzquierda + icons.flechaAbajo, "+", icons.cuadrado]
   }
 },
+      {
+  id: "kotal",
+  name: "Kotal Kahn (Destined)",
+  comboDamage: 53,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaArriba, "+", icons.triangulo],
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.triangulo]
+  ],
+  fatality: {
+    distance: "Media",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.flechaAbajo, icons.circulo],
+    name: "(Sunstrike)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con Espada y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "dvorah",
+  name: "D'Vorah (Kytinn)",
+  comboDamage: 54,
+  combo: [
+    [icons.flechaDerecha, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.circulo],
+    [icons.flechaIzquierda, "+", icons.triangulo],
+    [icons.cuadrado, ",", icons.triangulo, ",", icons.flechaAbajo + icons.flechaIzquierda, "+", icons.cuadrado]
+  ],
+  fatality: {
+    distance: "Lejos",
+    combo: [icons.flechaIzquierda, icons.flechaDerecha, icons.flechaAbajo, icons.triangulo],
+    name: "(Bug Me Not)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con aguijón y mantener ←",
+    combo: [icons.flechaIzquierda + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "ferratorr",
+  name: "Ferra/Torr (Bash)",
+  comboDamage: 57,
+  combo: [
+    [icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.triangulo],
+    [icons.flechaDerecha, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.cuadrado, icons.triangulo],
+    name: "(Ground and Pound)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con Smash y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.triangulo]
+  }
+},
+{
+  id: "kungjin",
+  name: "Kung Jin (Archer)",
+  comboDamage: 47,
+  combo: [
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaIzquierda, "+", icons.triangulo],
+    [icons.flechaIzquierda, "+", icons.equis],
+    [icons.flechaDerecha, "+", icons.cuadrado, ",", icons.triangulo]
+  ],
+  fatality: {
+    distance: "Media",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.flechaAbajo, icons.circulo],
+    name: "(Bullseye)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con flecha y mantener ←",
+    combo: [icons.flechaIzquierda + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "tremor",
+  name: "Tremor (Earthshaker)",
+  comboDamage: 52,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.triangulo],
+    [icons.equis, ",", icons.cuadrado, ",", icons.triangulo]
+  ],
+  fatality: {
+    distance: "Lejos",
+    combo: [icons.flechaIzquierda, icons.flechaDerecha, icons.flechaAbajo, icons.cuadrado],
+    name: "(Seismic Slam)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Finalizar con tierra y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "geras",
+  name: "Geras (The Infinite)",
+  comboDamage: 58,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.triangulo],
+    [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.equis],
+    [icons.cuadrado, ",", icons.triangulo]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.flechaAbajo, icons.triangulo],
+    name: "(Return to Sand)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Finalizar con agarre y mantener ←",
+    combo: [icons.flechaIzquierda + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "noobsaibot",
+  name: "Noob Saibot (Shadow Ninja)",
+  comboDamage: 54,
+  combo: [
+    [icons.cuadrado, ",", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo],
+    [icons.flechaIzquierda, "+", icons.triangulo],
+    [icons.equis, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaAbajo, icons.flechaAbajo, icons.flechaIzquierda, icons.circulo],
+    name: "(Flawless Execution)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Terminar con Shadow Slide y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "shangtsung",
+  name: "Shang Tsung (Sorcerer)",
+  comboDamage: 52,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.flechaDerecha, "+", icons.triangulo],
+    [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.cuadrado],
+    [icons.flechaArriba, "+", icons.equis]
+  ],
+  fatality: {
+    distance: "Lejos",
+    combo: [icons.flechaIzquierda, icons.flechaDerecha, icons.flechaAbajo, icons.triangulo],
+    name: "(Soul Steal)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Finalizar con fuego y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "jax",
+  name: "Jax Briggs (Cybernetic)",
+  comboDamage: 55,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.equis],
+    [icons.cuadrado, ",", icons.triangulo],
+    [icons.flechaAbajo + icons.flechaDerecha, "+", icons.equis]
+  ],
+  fatality: {
+    distance: "Media",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.flechaAbajo, icons.cuadrado],
+    name: "(Ground Pound)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Finalizar con Power Blow y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "quanchi",
+  name: "Quan Chi (Necromancer)",
+  comboDamage: 53,
+  combo: [
+    [icons.flechaDerecha, "+", icons.cuadrado, ",", icons.equis, ",", icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo],
+    [icons.flechaIzquierda, "+", icons.triangulo],
+    [icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado]
+  ],
+  fatality: {
+    distance: "Lejos",
+    combo: [icons.flechaIzquierda, icons.flechaDerecha, icons.flechaAbajo, icons.circulo],
+    name: "(Torment)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Finalizar con púas y mantener ←",
+    combo: [icons.flechaIzquierda + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "skarlet",
+  name: "Skarlet (Blood Queen)",
+  comboDamage: 50,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.flechaAbajo + icons.flechaDerecha, "+", icons.triangulo],
+    [icons.cuadrado, ",", icons.equis],
+    [icons.flechaAbajo + icons.flechaIzquierda, "+", icons.circulo]
+  ],
+  fatality: {
+    distance: "Cercana",
+    combo: [icons.flechaDerecha, icons.flechaIzquierda, icons.flechaAbajo, icons.circulo],
+    name: "(Crimson Scythe)"
+  },
+  brutality: {
+    distance: "Media",
+    condition: "Terminar con sangre y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+},
+{
+  id: "sonya",
+  name: "Sonya Blade (Special Forces)",
+  comboDamage: 54,
+  combo: [
+    [icons.flechaIzquierda, "+", icons.cuadrado, ",", icons.triangulo],
+    [icons.flechaAbajo + icons.flechaDerecha, "+", icons.cuadrado],
+    [icons.flechaDerecha, "+", icons.equis]
+  ],
+  fatality: {
+    distance: "Lejos",
+    combo: [icons.flechaIzquierda, icons.flechaDerecha, icons.flechaAbajo, icons.triangulo],
+    name: "(Touch of Death)"
+  },
+  brutality: {
+    distance: "Cercana",
+    condition: "Terminar con beso y mantener →",
+    combo: [icons.flechaDerecha + icons.flechaAbajo, "+", icons.cuadrado]
+  }
+}
 }
       // Agrega aquí el resto de personajes que desees, siguiendo el formato
     ];
